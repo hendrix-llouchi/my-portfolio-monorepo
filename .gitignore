@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment Variables (Keep these secret!)
+.env
+.env.local
+.env.*.local
+
+# System/Build Files
+.DS_Store
+dist/
+build/
+public/build/
+storage/*.key

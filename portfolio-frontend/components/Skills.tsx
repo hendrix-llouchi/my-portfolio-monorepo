@@ -1,164 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2, Code2, Database, BrainCircuit, Layout, Terminal, ShieldCheck, Globe, Smartphone, Cloud, Server } from 'lucide-react';
+import { Loader2, Code2 } from 'lucide-react';
 import { Skill } from '../types';
 
-// Icon mapping for skills based on category and name
-const getSkillIcon = (skillName: string, category: string) => {
-  const name = skillName.toLowerCase();
-  
-  // Specific skill mappings
-  if (name.includes('react')) {
-    return <Code2 className="w-12 h-12" />;
-  }
-  if (name.includes('vue')) {
-    return <Code2 className="w-12 h-12" />;
-  }
-  if (name.includes('angular')) {
-    return <Code2 className="w-12 h-12" />;
-  }
-  if (name.includes('laravel')) {
-    return <Server className="w-12 h-12" />;
-  }
-  if (name.includes('django')) {
-    return <Server className="w-12 h-12" />;
-  }
-  if (name.includes('express')) {
-    return <Server className="w-12 h-12" />;
-  }
-  if (name.includes('mysql') || name.includes('postgres') || name.includes('mongo') || name.includes('database')) {
-    return <Database className="w-12 h-12" />;
-  }
-  if (name.includes('machine learning') || name.includes('ml') || name.includes('ai') || name.includes('artificial intelligence')) {
-    return <BrainCircuit className="w-12 h-12" />;
-  }
-  if (name.includes('mobile') || name.includes('react native') || name.includes('flutter')) {
-    return <Smartphone className="w-12 h-12" />;
-  }
-  if (name.includes('cloud') || name.includes('aws') || name.includes('azure')) {
-    return <Cloud className="w-12 h-12" />;
-  }
-  if (name.includes('security') || name.includes('cyber')) {
-    return <ShieldCheck className="w-12 h-12" />;
-  }
-  if (name.includes('tailwind') || name.includes('css')) {
-    return <Layout className="w-12 h-12" />;
-  }
-  if (name.includes('git') || name.includes('github')) {
-    return <Terminal className="w-12 h-12" />;
-  }
-  if (name.includes('python')) {
-    return <Code2 className="w-12 h-12" />;
-  }
-  if (name.includes('javascript') || name.includes('typescript') || name.includes('js')) {
-    return <Code2 className="w-12 h-12" />;
-  }
-  
-  // Category-based fallback
-  switch (category.toLowerCase()) {
-    case 'frontend':
-      return <Layout className="w-12 h-12" />;
-    case 'backend':
-      return <Server className="w-12 h-12" />;
-    case 'data/ai':
-      return <BrainCircuit className="w-12 h-12" />;
-    case 'tools':
-      return <Terminal className="w-12 h-12" />;
-    default:
-      return <Code2 className="w-12 h-12" />;
-  }
+// Icon map for 3D skill icons
+const skillIcons: Record<string, string> = {
+  "React": "/icons/react.png",
+  "Laravel": "/icons/laravel.png",
+  "TypeScript": "/icons/typescript.png",
+  "Python": "/icons/python.png",
+  "Git": "/icons/git.png",
+  "MySQL": "/icons/mysql.png",
+  "HTML": "/icons/html.png",
+  "CSS": "/icons/css.png",
 };
 
-// Color mapping for specific skills
-const getSkillColor = (skillName: string, category: string) => {
-  const name = skillName.toLowerCase();
-  
-  // Specific skill color mappings
-  if (name.includes('laravel')) {
-    return 'text-red-500'; // Laravel = Red
-  }
-  if (name.includes('react')) {
-    return 'text-blue-500'; // React = Blue
-  }
-  if (name.includes('vue')) {
-    return 'text-green-500'; // Vue = Green
-  }
-  if (name.includes('angular')) {
-    return 'text-red-600'; // Angular = Red
-  }
-  if (name.includes('javascript') || name.includes('js')) {
-    return 'text-yellow-400'; // JavaScript = Yellow
-  }
-  if (name.includes('typescript')) {
-    return 'text-blue-600'; // TypeScript = Dark Blue
-  }
-  if (name.includes('python')) {
-    return 'text-blue-400'; // Python = Light Blue
-  }
-  if (name.includes('tailwind') || name.includes('css')) {
-    return 'text-cyan-400'; // Tailwind = Cyan
-  }
-  if (name.includes('mysql')) {
-    return 'text-blue-600'; // MySQL = Blue
-  }
-  if (name.includes('postgres')) {
-    return 'text-blue-700'; // PostgreSQL = Dark Blue
-  }
-  if (name.includes('mongo')) {
-    return 'text-green-600'; // MongoDB = Green
-  }
-  if (name.includes('django')) {
-    return 'text-green-700'; // Django = Dark Green
-  }
-  if (name.includes('express')) {
-    return 'text-gray-400'; // Express = Gray
-  }
-  if (name.includes('machine learning') || name.includes('ml')) {
-    return 'text-purple-500'; // ML = Purple
-  }
-  if (name.includes('ai') || name.includes('artificial intelligence')) {
-    return 'text-pink-500'; // AI = Pink
-  }
-  if (name.includes('react native')) {
-    return 'text-cyan-500'; // React Native = Cyan
-  }
-  if (name.includes('flutter')) {
-    return 'text-blue-400'; // Flutter = Blue
-  }
-  if (name.includes('git') || name.includes('github')) {
-    return 'text-orange-500'; // Git = Orange
-  }
-  if (name.includes('aws')) {
-    return 'text-orange-400'; // AWS = Orange
-  }
-  if (name.includes('azure')) {
-    return 'text-blue-500'; // Azure = Blue
-  }
-  if (name.includes('security') || name.includes('cyber')) {
-    return 'text-red-600'; // Security = Red
-  }
-  if (name.includes('data science')) {
-    return 'text-purple-400'; // Data Science = Purple
+// Helper function to get icon path (case-insensitive with fallback)
+const getSkillIconPath = (skillName: string): string | null => {
+  // Exact match first
+  if (skillIcons[skillName]) {
+    return skillIcons[skillName];
   }
   
-  // Category-based fallback
-  switch (category.toLowerCase()) {
-    case 'frontend':
-      return 'text-blue-400';
-    case 'backend':
-      return 'text-green-400';
-    case 'data/ai':
-      return 'text-purple-400';
-    case 'tools':
-      return 'text-yellow-400';
-    default:
-      return 'text-blue-400';
+  // Case-insensitive match
+  const normalizedName = skillName.toLowerCase();
+  for (const [key, value] of Object.entries(skillIcons)) {
+    if (key.toLowerCase() === normalizedName) {
+      return value;
+    }
   }
+  
+  return null;
 };
 
 const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) => {
-  const IconComponent = getSkillIcon(skill.name, skill.category);
-  const iconColor = getSkillColor(skill.name, skill.category);
+  const iconPath = getSkillIconPath(skill.name);
+  const [imageError, setImageError] = useState(false);
+  const hasIcon = iconPath !== null && !imageError;
 
   return (
     <motion.div
@@ -169,9 +47,19 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
       whileHover={{ y: -5, backgroundColor: "rgba(255,255,255,0.2)" }}
       className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 flex flex-col items-center justify-center aspect-square cursor-pointer transition-all"
     >
-      <div className={`${iconColor} mb-4`}>
-        {IconComponent}
-      </div>
+      {hasIcon ? (
+        <img
+          src={iconPath!}
+          alt={`${skill.name} icon`}
+          className="w-16 h-16 object-contain drop-shadow-lg mb-4"
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        <div className="text-blue-400 mb-4">
+          <Code2 className="w-16 h-16" />
+        </div>
+      )}
+
       <h3 className="text-white font-medium text-center text-sm md:text-base">
         {skill.name}
       </h3>

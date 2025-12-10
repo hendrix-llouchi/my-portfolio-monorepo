@@ -14,9 +14,45 @@ class ProjectController extends Controller
      */
     public function index(): JsonResponse
     {
-        $projects = Project::all();
+        try {
+            $projects = Project::all()->map(function ($project) {
+                // Ensure tech_stack is always an array
+                $techStack = $project->tech_stack;
+                if (is_string($techStack)) {
+                    $decoded = json_decode($techStack, true);
+                    $techStack = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) 
+                        ? $decoded 
+                        : array_filter(array_map('trim', explode(',', $techStack)));
+                }
+                if (!is_array($techStack)) {
+                    $techStack = [];
+                }
+                
+                return [
+                    'id' => $project->id,
+                    'title' => $project->title,
+                    'description' => $project->description,
+                    'tech_stack' => $techStack,
+                    'image_url' => $project->image_url,
+                    'demo_link' => $project->demo_link,
+                    'repo_link' => $project->repo_link,
+                    'created_at' => $project->created_at,
+                    'updated_at' => $project->updated_at,
+                ];
+            });
 
-        return response()->json($projects);
+            return response()->json($projects);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching projects', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'message' => 'Failed to fetch projects',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
     }
 
     /**

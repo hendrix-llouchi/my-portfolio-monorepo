@@ -33,6 +33,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchStats();
+    
+    // Real-time polling: Update stats every 10 seconds
+    const interval = setInterval(() => {
+      fetchStats();
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchStats = async () => {

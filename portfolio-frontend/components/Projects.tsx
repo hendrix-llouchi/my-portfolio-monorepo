@@ -53,16 +53,18 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
         </p>
 
         {/* Tech Stack */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tech_stack.map((tech) => (
-            <span 
-              key={tech} 
-              className="text-xs px-2 py-1 rounded-full bg-white/10 text-blue-100 border border-white/10"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+        {project.tech_stack && project.tech_stack.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {(Array.isArray(project.tech_stack) ? project.tech_stack : []).map((tech, idx) => (
+              <span 
+                key={idx} 
+                className="text-xs px-2 py-1 rounded-full bg-white/10 text-blue-100 border border-white/10"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Links Footer */}
         <div className="flex gap-4 pt-4 border-t border-white/10">
@@ -123,11 +125,18 @@ const Projects: React.FC = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch projects: ${response.statusText}`);
+          const errorData = await response.json().catch(() => ({}));
+          const errorMessage = errorData.message || errorData.error || `Failed to fetch projects: ${response.statusText}`;
+          throw new Error(errorMessage);
         }
 
         const data = await response.json();
-        setProjects(data);
+        // Ensure tech_stack is always an array
+        const normalizedData = Array.isArray(data) ? data.map(project => ({
+          ...project,
+          tech_stack: Array.isArray(project.tech_stack) ? project.tech_stack : []
+        })) : [];
+        setProjects(normalizedData);
       } catch (err) {
         console.error('Error fetching projects:', err);
         setError(err instanceof Error ? err.message : 'Failed to load projects. Please try again later.');

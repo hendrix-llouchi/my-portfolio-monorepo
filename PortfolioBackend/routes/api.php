@@ -21,6 +21,7 @@ Route::middleware('throttle:contact')->group(function () {
 
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 
 // Protected admin routes
 Route::middleware('auth:sanctum')->group(function () {

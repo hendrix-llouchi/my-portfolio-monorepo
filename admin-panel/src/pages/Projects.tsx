@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, X, Image as ImageIcon, ExternalLink, Github } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Image as ImageIcon, ExternalLink, Github, FolderOpen } from 'lucide-react';
 import api from '../lib/api';
 
 interface Project {

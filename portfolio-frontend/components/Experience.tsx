@@ -81,11 +81,13 @@ const Experience: React.FC = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch experiences: ${response.statusText}`);
+          const errorData = await response.json().catch(() => ({}));
+          const errorMessage = errorData.message || errorData.error || `Failed to fetch experiences: ${response.statusText}`;
+          throw new Error(errorMessage);
         }
 
         const data = await response.json();
-        setExperiences(data);
+        setExperiences(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Error fetching experiences:', err);
         setError(err instanceof Error ? err.message : 'Failed to load experiences. Please try again later.');

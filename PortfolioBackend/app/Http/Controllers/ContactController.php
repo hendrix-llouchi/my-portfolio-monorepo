@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewContactMessage;
 use App\Http\Requests\ContactFormRequest;
 use App\Mail\ContactMail;
 use App\Models\ContactMessage;
@@ -18,7 +19,10 @@ class ContactController extends Controller
         $validated = $request->validated();
 
         // Save the message to the database
-        ContactMessage::create($validated);
+        $message = ContactMessage::create($validated);
+
+        // Broadcast real-time event
+        event(new NewContactMessage($message));
 
         // Send email notification
         Mail::to('henricobb2@gmail.com')->send(new ContactMail($validated));

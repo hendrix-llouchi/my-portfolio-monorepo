@@ -11,11 +11,46 @@ class ExperienceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $experiences = Experience::all();
+        try {
+            $experiences = Experience::all()->map(function ($experience) {
+                // Ensure technologies is always an array
+                $technologies = $experience->technologies;
+                if (is_string($technologies)) {
+                    $decoded = json_decode($technologies, true);
+                    $technologies = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) 
+                        ? $decoded 
+                        : [];
+                }
+                if (!is_array($technologies)) {
+                    $technologies = [];
+                }
+                
+                return [
+                    'id' => $experience->id,
+                    'company' => $experience->company,
+                    'role' => $experience->role,
+                    'period' => $experience->period,
+                    'description' => $experience->description,
+                    'technologies' => $technologies,
+                    'created_at' => $experience->created_at,
+                    'updated_at' => $experience->updated_at,
+                ];
+            });
 
-        return response()->json($experiences);
+            return response()->json($experiences);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching experiences', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'message' => 'Failed to fetch experiences',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
     }
 
     /**

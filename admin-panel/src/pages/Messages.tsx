@@ -19,6 +19,13 @@ export default function Messages() {
 
   useEffect(() => {
     fetchMessages();
+    
+    // Real-time polling: Check for new messages every 5 seconds
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchMessages = async () => {

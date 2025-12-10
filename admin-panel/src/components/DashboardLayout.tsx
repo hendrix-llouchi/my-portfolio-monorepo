@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   FolderOpen, 
@@ -23,6 +23,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Reset scroll position when route changes to prevent header jumping
+  useEffect(() => {
+    const mainContent = document.querySelector('main');
+    if (mainContent) {
+      mainContent.scrollTop = 0;
+    }
+  }, [location.pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
@@ -125,11 +133,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </aside>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Top Header */}
-          <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
-            <div className="px-4 sm:px-6 lg:px-8 py-4">
-              <div className="flex items-center justify-between">
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+          {/* Top Header - Fixed position to prevent jumping */}
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm h-[72px] flex items-center">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between h-full">
                 <div className="flex items-center space-x-4">
                   <button
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -168,10 +176,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </header>
 
-          {/* Page Content */}
-          <main className="flex-1 p-4 sm:p-6 lg:p-8">
-            <div className="max-w-7xl mx-auto">
-              {children}
+          {/* Page Content - Scrollable area */}
+          <main className="flex-1 overflow-y-auto">
+            <div className="p-4 sm:p-6 lg:p-8">
+              <div className="max-w-7xl mx-auto">
+                {children}
+              </div>
             </div>
           </main>
         </div>

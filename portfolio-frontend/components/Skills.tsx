@@ -104,11 +104,13 @@ const Skills: React.FC = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch skills: ${response.statusText}`);
+          const errorData = await response.json().catch(() => ({}));
+          const errorMessage = errorData.message || errorData.error || `Failed to fetch skills: ${response.statusText}`;
+          throw new Error(errorMessage);
         }
 
         const data = await response.json();
-        setSkills(data);
+        setSkills(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Error fetching skills:', err);
         setError(err instanceof Error ? err.message : 'Failed to load skills. Please try again later.');

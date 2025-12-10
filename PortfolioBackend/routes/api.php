@@ -29,8 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Projects CRUD (except GET which is public)
     Route::post('/projects', [ProjectController::class, 'store']);
-    Route::put('/projects/{project}', [ProjectController::class, 'update']);
-    Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy']); // DELETE must come before match route
+    Route::match(['put', 'post'], '/projects/{project}', [ProjectController::class, 'update']); // Support both PUT and POST (for file uploads with _method=PUT)
 
     // Skills CRUD (except GET which is public)
     Route::post('/skills', [SkillController::class, 'store']);

@@ -71,9 +71,6 @@ const Footer: React.FC = () => {
         <p className="text-blue-100/70 text-sm">
           © {new Date().getFullYear()} Henry Cobbinah. All rights reserved.
         </p>
-        <p className="text-blue-100/50 text-xs mt-2">
-            Built with React & Tailwind CSS. Design inspired by Organic Modern.
-        </p>
       </div>
     </footer>
   );

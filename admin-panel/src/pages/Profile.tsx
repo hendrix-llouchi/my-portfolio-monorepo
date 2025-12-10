@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Save, User, FileText, Link as LinkIcon, Trash2 } from 'lucide-react';
+import { Save, User, FileText, Link as LinkIcon, Trash2, X, Upload, Github, Linkedin } from 'lucide-react';
 import api from '../lib/api';
 
 interface Profile {
@@ -52,11 +52,9 @@ export default function Profile() {
         linkedin: data.linkedin || '',
         github: data.github || '',
       });
-      // Set avatar preview - construct full URL if it's a relative path
       if (data.avatar_url) {
         let previewUrl = data.avatar_url;
         if (!previewUrl.startsWith('http')) {
-          // It's a relative path like 'storage/profile/file.jpg', construct full URL
           previewUrl = `http://127.0.0.1:8000/${previewUrl}`;
         }
         setAvatarPreview(previewUrl);
@@ -75,7 +73,7 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (file) {
       setAvatarFile(file);
-      setDeleteAvatar(false); // Reset delete flag when new file is selected
+      setDeleteAvatar(false);
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result as string);
@@ -88,7 +86,7 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (file) {
       setResumeFile(file);
-      setDeleteResume(false); // Reset delete flag when new file is selected
+      setDeleteResume(false);
     }
   };
 
@@ -113,7 +111,6 @@ export default function Profile() {
         formDataToSend.append('resume', resumeFile);
       }
       
-      // Add delete flags
       if (deleteAvatar) {
         formDataToSend.append('delete_avatar', 'true');
       }
@@ -128,11 +125,9 @@ export default function Profile() {
       setResumeFile(null);
       setDeleteAvatar(false);
       setDeleteResume(false);
-      // Update avatar preview - construct full URL if needed
       if (updatedProfile.avatar_url) {
         let previewUrl = updatedProfile.avatar_url;
         if (!previewUrl.startsWith('http')) {
-          // It's a relative path, construct full URL
           previewUrl = `http://127.0.0.1:8000/${previewUrl}`;
         }
         setAvatarPreview(`${previewUrl}?t=${Date.now()}`);
@@ -160,175 +155,64 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-600">Loading profile...</p>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
         <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
+        <p className="text-gray-600 mt-1">Manage your personal information and portfolio details</p>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Text Fields */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Basic Information</h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Headline *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.headline}
-                    onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Software Engineer | Full-Stack & Mobile Dev"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Sub Headline
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.sub_headline}
-                    onChange={(e) => setFormData({ ...formData, sub_headline: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Machine Learning • Data Science • AI"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Short Bio
-                  </label>
-                  <textarea
-                    value={formData.short_bio}
-                    onChange={(e) => setFormData({ ...formData, short_bio: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows={4}
-                    placeholder="Building scalable apps and intelligent solutions."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Status Text
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.status_text}
-                    onChange={(e) => setFormData({ ...formData, status_text: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="System Online"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                <LinkIcon className="w-5 h-5 mr-2" />
-                Social Links
-              </h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    LinkedIn URL
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.linkedin}
-                    onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="https://linkedin.com/in/yourprofile"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    GitHub URL
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.github}
-                    onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="https://github.com/yourusername"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - File Uploads & Preview */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                <User className="w-5 h-5 mr-2" />
-                Avatar
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Avatar Section */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-soft border border-gray-100 p-6 sticky top-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                <User className="w-5 h-5 mr-2 text-blue-600" />
+                Profile Picture
               </h2>
               
               <div className="space-y-4">
                 {avatarPreview && !deleteAvatar && (
-                  <div className="mb-4">
-                    <p className="text-sm text-gray-600 mb-2">Current Avatar:</p>
-                    <div className="relative">
-                      <img
-                        src={avatarPreview.startsWith('http') 
-                          ? avatarPreview 
-                          : `http://127.0.0.1:8000/${avatarPreview}`}
-                        alt="Avatar preview"
-                        className="w-48 h-48 object-cover rounded-lg border border-gray-300"
-                        onError={(e) => {
-                          console.error('Avatar preview failed to load:', avatarPreview);
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (confirm('Are you sure you want to delete this avatar?')) {
-                            setDeleteAvatar(true);
-                            setAvatarPreview(null);
-                            setAvatarFile(null);
-                          }
-                        }}
-                        className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
-                        title="Delete avatar"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
+                  <div className="relative">
+                    <img
+                      src={avatarPreview.startsWith('http') 
+                        ? avatarPreview 
+                        : `http://127.0.0.1:8000/${avatarPreview}`}
+                      alt="Avatar preview"
+                      className="w-full aspect-square object-cover rounded-xl border-2 border-gray-200"
+                      onError={(e) => {
+                        console.error('Avatar preview failed to load:', avatarPreview);
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (confirm('Are you sure you want to delete this avatar?')) {
+                          setDeleteAvatar(true);
+                          setAvatarPreview(null);
+                          setAvatarFile(null);
+                        }
+                      }}
+                      className="absolute top-3 right-3 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors shadow-lg"
+                      title="Delete avatar"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
                   </div>
                 )}
                 
                 {deleteAvatar && (
-                  <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                    <p className="text-sm text-yellow-800">
-                      Avatar will be deleted when you save the profile.
+                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
+                    <p className="text-sm text-orange-800 mb-2">
+                      Avatar will be deleted when you save.
                     </p>
                     <button
                       type="button"
@@ -336,7 +220,7 @@ export default function Profile() {
                         setDeleteAvatar(false);
                         setAvatarPreview(profile?.avatar_url || null);
                       }}
-                      className="mt-2 text-sm text-yellow-800 hover:text-yellow-900 underline"
+                      className="text-sm text-orange-800 hover:text-orange-900 font-medium underline"
                     >
                       Cancel deletion
                     </button>
@@ -344,71 +228,200 @@ export default function Profile() {
                 )}
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Upload New Avatar
+                  <label
+                    htmlFor="avatar-upload"
+                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-colors bg-gray-50"
+                  >
+                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                    <span className="text-sm text-gray-600 font-medium">
+                      {avatarFile ? 'Change avatar' : 'Upload avatar'}
+                    </span>
+                    <span className="text-xs text-gray-500 mt-1">JPEG, PNG, GIF up to 2MB</span>
                   </label>
                   <input
+                    id="avatar-upload"
                     type="file"
                     accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
                     onChange={handleAvatarChange}
                     disabled={deleteAvatar}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="hidden"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Accepted: JPEG, PNG, JPG, GIF, SVG (Max 2MB)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Form Section */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Basic Information */}
+            <div className="bg-white rounded-xl shadow-soft border border-gray-100 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Basic Information</h2>
+              
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="Your full name"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Headline <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.headline}
+                    onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="Software Engineer | Full-Stack & Mobile Dev"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Sub Headline
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.sub_headline}
+                    onChange={(e) => setFormData({ ...formData, sub_headline: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="Machine Learning • Data Science • AI"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Short Bio
+                  </label>
+                  <textarea
+                    value={formData.short_bio}
+                    onChange={(e) => setFormData({ ...formData, short_bio: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                    rows={4}
+                    placeholder="Building scalable apps and intelligent solutions."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Status Text
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.status_text}
+                    onChange={(e) => setFormData({ ...formData, status_text: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="System Online"
+                  />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                <FileText className="w-5 h-5 mr-2" />
+            {/* Social Links */}
+            <div className="bg-white rounded-xl shadow-soft border border-gray-100 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                <LinkIcon className="w-5 h-5 mr-2 text-blue-600" />
+                Social Links
+              </h2>
+              
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                    <Linkedin className="w-4 h-4 mr-2 text-blue-600" />
+                    LinkedIn URL
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.linkedin}
+                    onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="https://linkedin.com/in/yourprofile"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                    <Github className="w-4 h-4 mr-2 text-gray-900" />
+                    GitHub URL
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.github}
+                    onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="https://github.com/yourusername"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Resume Section */}
+            <div className="bg-white rounded-xl shadow-soft border border-gray-100 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                <FileText className="w-5 h-5 mr-2 text-blue-600" />
                 Resume
               </h2>
               
               <div className="space-y-4">
                 {profile?.resume_url && !deleteResume && (
-                  <div className="mb-4">
-                    <p className="text-sm text-gray-600 mb-2">Current Resume:</p>
-                    <div className="flex items-center gap-2">
-                      <a
-                        href={profile.resume_url.startsWith('http') 
-                          ? profile.resume_url 
-                          : `http://127.0.0.1:8000/${profile.resume_url}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                      >
-                        <FileText className="w-4 h-4 mr-2" />
-                        View Current Resume
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (confirm('Are you sure you want to delete this resume?')) {
-                            setDeleteResume(true);
-                          }
-                        }}
-                        className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                        title="Delete resume"
-                      >
-                        <Trash2 size={16} className="mr-2" />
-                        Delete
-                      </button>
+                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-6 h-6 text-blue-600" />
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">Current Resume</p>
+                          <p className="text-xs text-gray-600">Click to view</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <a
+                          href={profile.resume_url.startsWith('http') 
+                            ? profile.resume_url 
+                            : `http://127.0.0.1:8000/${profile.resume_url}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                        >
+                          View
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (confirm('Are you sure you want to delete this resume?')) {
+                              setDeleteResume(true);
+                            }
+                          }}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                        >
+                          <Trash2 className="w-4 h-4 inline mr-1" />
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
                 
                 {deleteResume && (
-                  <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                    <p className="text-sm text-yellow-800">
-                      Resume will be deleted when you save the profile.
+                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
+                    <p className="text-sm text-orange-800 mb-2">
+                      Resume will be deleted when you save.
                     </p>
                     <button
                       type="button"
                       onClick={() => {
                         setDeleteResume(false);
                       }}
-                      className="mt-2 text-sm text-yellow-800 hover:text-yellow-900 underline"
+                      className="text-sm text-orange-800 hover:text-orange-900 font-medium underline"
                     >
                       Cancel deletion
                     </button>
@@ -416,17 +429,24 @@ export default function Profile() {
                 )}
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Upload New Resume
+                  <label
+                    htmlFor="resume-upload"
+                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-colors bg-gray-50"
+                  >
+                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                    <span className="text-sm text-gray-600 font-medium">
+                      {resumeFile ? 'Change resume' : 'Upload resume'}
+                    </span>
+                    <span className="text-xs text-gray-500 mt-1">PDF, DOC, DOCX up to 5MB</span>
                   </label>
                   <input
+                    id="resume-upload"
                     type="file"
                     accept=".pdf,.doc,.docx"
                     onChange={handleResumeChange}
                     disabled={deleteResume}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="hidden"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Accepted: PDF, DOC, DOCX (Max 5MB)</p>
                 </div>
               </div>
             </div>
@@ -434,18 +454,29 @@ export default function Profile() {
         </div>
 
         {/* Submit Button */}
-        <div className="mt-8 flex justify-end">
+        <div className="flex justify-end pt-6 border-t border-gray-200">
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold"
           >
-            <Save className="w-5 h-5 mr-2" />
-            {saving ? 'Saving...' : 'Save Profile'}
+            {saving ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="w-5 h-5 mr-2" />
+                Save Profile
+              </>
+            )}
           </button>
         </div>
       </form>
     </div>
   );
 }
-

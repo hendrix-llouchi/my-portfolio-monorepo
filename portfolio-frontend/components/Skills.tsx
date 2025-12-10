@@ -17,15 +17,25 @@ const skillIcons: Record<string, string> = {
 
 // Helper function to get icon path (case-insensitive with fallback)
 const getSkillIconPath = (skillName: string): string | null => {
+  // Trim and normalize the skill name
+  const normalizedName = skillName.trim();
+  
   // Exact match first
-  if (skillIcons[skillName]) {
-    return skillIcons[skillName];
+  if (skillIcons[normalizedName]) {
+    return skillIcons[normalizedName];
   }
   
   // Case-insensitive match
-  const normalizedName = skillName.toLowerCase();
+  const lowerName = normalizedName.toLowerCase();
   for (const [key, value] of Object.entries(skillIcons)) {
-    if (key.toLowerCase() === normalizedName) {
+    if (key.toLowerCase() === lowerName) {
+      return value;
+    }
+  }
+  
+  // Partial match (e.g., "Laravel" matches "Laravel Framework")
+  for (const [key, value] of Object.entries(skillIcons)) {
+    if (lowerName.includes(key.toLowerCase()) || key.toLowerCase().includes(lowerName)) {
       return value;
     }
   }
@@ -51,12 +61,15 @@ const SkillCard: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) 
         <img
           src={iconPath!}
           alt={`${skill.name} icon`}
-          className="w-16 h-16 object-contain drop-shadow-lg mb-4"
-          onError={() => setImageError(true)}
+          className="w-24 h-24 md:w-28 md:h-28 object-contain drop-shadow-lg mb-4"
+          onError={(e) => {
+            console.error(`Failed to load icon for ${skill.name}:`, iconPath);
+            setImageError(true);
+          }}
         />
       ) : (
         <div className="text-blue-400 mb-4">
-          <Code2 className="w-16 h-16" />
+          <Code2 className="w-24 h-24 md:w-28 md:h-28" />
         </div>
       )}
 
@@ -112,6 +125,7 @@ const Skills: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Skills</h2>
+          <div className="w-20 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full" />
         </div>
 
         {loading && (

@@ -20,14 +20,24 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
             src={project.image_url} 
             alt={project.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              // If image fails to load, show placeholder
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+              const placeholder = target.nextElementSibling as HTMLElement;
+              if (placeholder) {
+                placeholder.style.display = 'flex';
+              }
+            }}
           />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 flex items-center justify-center">
-            <div className="text-white/30 text-6xl font-bold">
-              {project.title.charAt(0).toUpperCase()}
-            </div>
+        ) : null}
+        <div 
+          className={`w-full h-full bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 flex items-center justify-center ${project.image_url ? 'hidden' : ''}`}
+        >
+          <div className="text-white/30 text-6xl font-bold">
+            {project.title.charAt(0).toUpperCase()}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Content Area (Bottom Half) */}
@@ -134,6 +144,7 @@ const Projects: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Projects</h2>
+          <div className="w-20 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full mb-4" />
           <p className="text-blue-100 max-w-2xl mx-auto">
             A selection of projects demonstrating capabilities in full-stack development, data science pipelines, and AI integration.
           </p>

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Projects from './pages/Projects';
 import Skills from './pages/Skills';
@@ -18,10 +19,7 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardLayout>
-                <div className="text-center py-8">
-                  <h1 className="text-2xl font-bold">Dashboard</h1>
-                  <p className="text-gray-600 mt-2">Select a section from the sidebar</p>
-                </div>
+                <Dashboard />
               </DashboardLayout>
             </ProtectedRoute>
           }

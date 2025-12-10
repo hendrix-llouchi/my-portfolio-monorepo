@@ -60,7 +60,8 @@ const Navbar: React.FC = () => {
             </a>
           ))}
           <a
-            href={`mailto:${CONTACT_INFO.email}`}
+            href="#contact"
+            onClick={(e) => handleNavClick(e, '#contact')}
             className="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors border border-white/20 backdrop-blur-sm"
           >
             Hire Me
@@ -97,7 +98,8 @@ const Navbar: React.FC = () => {
                 </a>
               ))}
               <a
-                href={`mailto:${CONTACT_INFO.email}`}
+                href="#contact"
+                onClick={(e) => handleNavClick(e, '#contact')}
                 className="text-blue-400 py-2 block text-lg font-semibold"
               >
                 Hire Me

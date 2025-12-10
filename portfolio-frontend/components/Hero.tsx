@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Download, ChevronDown, Github, Linkedin, Mail } from 'lucide-react';
+import { FileText, ChevronDown, Github, Linkedin, Mail } from 'lucide-react';
 import { CONTACT_INFO } from '../constants';
 
 interface Profile {
@@ -198,12 +198,44 @@ const Hero: React.FC = () => {
             {profile?.resume_url && (
               <a 
                 href={profile.resume_url} 
+                download
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-blue-100 hover:text-white transition-colors"
-                title="Download CV"
+                title="Download Resume/CV"
+                onClick={(e) => {
+                  // Ensure proper download behavior
+                  const url = profile?.resume_url;
+                  if (!url) return;
+                  
+                  // Determine if URL is absolute or relative
+                  let downloadUrl = url;
+                  if (!url.startsWith('http')) {
+                    // If relative URL, make it absolute
+                    const apiUrl = import.meta.env.VITE_API_URL;
+                    if (apiUrl) {
+                      const baseUrl = apiUrl.replace('/api', '');
+                      downloadUrl = `${baseUrl}/${url.startsWith('/') ? url.slice(1) : url}`;
+                    }
+                  }
+                  
+                  // Extract filename from URL
+                  const urlParts = downloadUrl.split('/');
+                  const filename = urlParts[urlParts.length - 1].split('?')[0] || 'resume.pdf';
+                  
+                  // Force download by creating a temporary link
+                  e.preventDefault();
+                  const link = document.createElement('a');
+                  link.href = downloadUrl;
+                  link.download = filename;
+                  link.target = '_blank';
+                  link.rel = 'noopener noreferrer';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
               >
-                <Download size={24} />
+                <FileText size={24} />
               </a>
             )}
           </div>

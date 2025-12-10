@@ -31,6 +31,7 @@ export default function Profile() {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeFileName, setResumeFileName] = useState<string | null>(null);
   const [deleteAvatar, setDeleteAvatar] = useState(false);
   const [deleteResume, setDeleteResume] = useState(false);
 
@@ -85,8 +86,30 @@ export default function Profile() {
   const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file type
+      const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      const validExtensions = ['.pdf', '.doc', '.docx'];
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+      
+      if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
+        alert('Please upload a valid file (PDF, DOC, or DOCX)');
+        e.target.value = ''; // Reset input
+        return;
+      }
+      
+      // Validate file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        e.target.value = ''; // Reset input
+        return;
+      }
+      
       setResumeFile(file);
+      setResumeFileName(file.name);
       setDeleteResume(false);
+    } else {
+      setResumeFile(null);
+      setResumeFileName(null);
     }
   };
 
@@ -123,6 +146,7 @@ export default function Profile() {
       setProfile(updatedProfile);
       setAvatarFile(null);
       setResumeFile(null);
+      setResumeFileName(null);
       setDeleteAvatar(false);
       setDeleteResume(false);
       if (updatedProfile.avatar_url) {
@@ -428,13 +452,44 @@ export default function Profile() {
                   </div>
                 )}
                 
+                {resumeFile && !deleteResume && (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-6 h-6 text-green-600" />
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">Selected File</p>
+                          <p className="text-xs text-gray-600">{resumeFileName}</p>
+                          <p className="text-xs text-gray-500">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setResumeFile(null);
+                          setResumeFileName(null);
+                          const input = document.getElementById('resume-upload') as HTMLInputElement;
+                          if (input) input.value = '';
+                        }}
+                        className="px-3 py-1 text-sm text-red-600 hover:text-red-700 font-medium"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
                 <div>
                   <label
                     htmlFor="resume-upload"
-                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-colors bg-gray-50"
+                    className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                      resumeFile 
+                        ? 'border-green-400 bg-green-50' 
+                        : 'border-gray-300 bg-gray-50 hover:border-blue-400'
+                    }`}
                   >
-                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                    <span className="text-sm text-gray-600 font-medium">
+                    <Upload className={`w-8 h-8 mb-2 ${resumeFile ? 'text-green-600' : 'text-gray-400'}`} />
+                    <span className={`text-sm font-medium ${resumeFile ? 'text-green-700' : 'text-gray-600'}`}>
                       {resumeFile ? 'Change resume' : 'Upload resume'}
                     </span>
                     <span className="text-xs text-gray-500 mt-1">PDF, DOC, DOCX up to 5MB</span>
@@ -442,7 +497,7 @@ export default function Profile() {
                   <input
                     id="resume-upload"
                     type="file"
-                    accept=".pdf,.doc,.docx"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     onChange={handleResumeChange}
                     disabled={deleteResume}
                     className="hidden"

@@ -41,7 +41,11 @@ export default function Profile() {
 
   const fetchProfile = async () => {
     try {
-      const response = await api.get('/profile');
+      const response = await api.get(`/profile?t=${Date.now()}`, {
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       const data = response.data;
       setProfile(data);
       setFormData({
@@ -58,6 +62,10 @@ export default function Profile() {
         if (!previewUrl.startsWith('http')) {
           previewUrl = `http://127.0.0.1:8000/${previewUrl}`;
         }
+        // Add cache-busting parameter
+        previewUrl = previewUrl.includes('?') 
+          ? `${previewUrl.split('?')[0]}?t=${Date.now()}`
+          : `${previewUrl}?t=${Date.now()}`;
         setAvatarPreview(previewUrl);
       } else {
         setAvatarPreview(null);

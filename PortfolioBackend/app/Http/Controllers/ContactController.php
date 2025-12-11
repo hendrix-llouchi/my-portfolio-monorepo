@@ -42,4 +42,14 @@ class ContactController extends Controller
 
         return response()->json($messages, 200);
     }
+
+    /**
+     * Delete a contact message (admin only).
+     */
+    public function destroy(ContactMessage $message): JsonResponse
+    {
+        $message->delete();
+
+        return response()->json(['message' => 'Message deleted successfully'], 200);
+    }
 }

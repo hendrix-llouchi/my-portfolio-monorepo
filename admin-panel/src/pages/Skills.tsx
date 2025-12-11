@@ -26,7 +26,11 @@ export default function Skills() {
 
   const fetchSkills = async () => {
     try {
-      const response = await api.get('/skills');
+      const response = await api.get(`/skills?t=${Date.now()}`, {
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       setSkills(response.data);
     } catch (error) {
       console.error('Error fetching skills:', error);
@@ -53,10 +57,15 @@ export default function Skills() {
       setShowModal(false);
       setEditingSkill(null);
       resetForm();
-      fetchSkills();
-    } catch (error) {
+      await fetchSkills();
+      alert(editingSkill ? 'Skill updated successfully!' : 'Skill added successfully!');
+    } catch (error: any) {
       console.error('Error saving skill:', error);
-      alert('Error saving skill. Please try again.');
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.error 
+        || error.message 
+        || 'Error saving skill. Please try again.';
+      alert(errorMessage);
     }
   };
 
@@ -75,10 +84,15 @@ export default function Skills() {
 
     try {
       await api.delete(`/skills/${id}`);
-      fetchSkills();
-    } catch (error) {
+      await fetchSkills();
+      alert('Skill deleted successfully!');
+    } catch (error: any) {
       console.error('Error deleting skill:', error);
-      alert('Error deleting skill. Please try again.');
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.error 
+        || error.message 
+        || 'Error deleting skill. Please try again.';
+      alert(errorMessage);
     }
   };
 

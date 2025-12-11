@@ -115,27 +115,30 @@ class ProfileController extends Controller
     }
 
     /**
-     * Extract the relative path from a URL or path.
+     * Extract the relative path from a URL or path for use with Storage::disk('public').
+     * Returns path relative to storage/app/public (without 'storage/' prefix).
      *
      * @param string $url
      * @return string|null
      */
     private function extractPathFromUrl(string $url): ?string
     {
-        // If it's already a relative path (starts with 'storage/'), return it
+        // If it's already a relative path (starts with 'storage/'), remove the prefix
         if (str_starts_with($url, 'storage/')) {
-            return $url;
+            return substr($url, 8); // Remove 'storage/' prefix (8 characters)
         }
         
         // If it's a full URL, extract the path
         $urlPath = parse_url($url, PHP_URL_PATH);
         if ($urlPath) {
-            // Remove leading slash and 'storage/' if present
+            // Remove leading slash
             $path = ltrim($urlPath, '/');
+            // Remove 'storage/' prefix if present
             if (str_starts_with($path, 'storage/')) {
-                return $path;
+                return substr($path, 8); // Remove 'storage/' prefix
             }
-            return 'storage/' . $path;
+            // Return the path as is (should be relative to storage/app/public)
+            return $path;
         }
         
         return null;

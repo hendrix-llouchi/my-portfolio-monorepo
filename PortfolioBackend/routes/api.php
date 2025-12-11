@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Contact messages (admin only)
     Route::get('/messages', [ContactController::class, 'messages']);
+    Route::delete('/messages/{message}', [ContactController::class, 'destroy']);
 
     // Profile management (admin only)
     Route::post('/profile', [ProfileController::class, 'update']);

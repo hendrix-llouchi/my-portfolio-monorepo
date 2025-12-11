@@ -45,7 +45,15 @@ export default function Projects() {
         demo_link: editingProject.demo_link || '',
         repo_link: editingProject.repo_link || '',
       });
-      setImagePreview(editingProject.image_url || null);
+      if (editingProject.image_url) {
+        let previewUrl = editingProject.image_url;
+        if (!previewUrl.startsWith('http')) {
+          previewUrl = `http://127.0.0.1:8000/${previewUrl}`;
+        }
+        setImagePreview(previewUrl);
+      } else {
+        setImagePreview(null);
+      }
       setImageFile(null);
       setRemoveImage(false);
     }
@@ -53,7 +61,11 @@ export default function Projects() {
 
   const fetchProjects = async () => {
     try {
-      const response = await api.get('/projects');
+      const response = await api.get(`/projects?t=${Date.now()}`, {
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       setProjects(response.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -124,7 +136,8 @@ export default function Projects() {
       setShowModal(false);
       setEditingProject(null);
       resetForm();
-      fetchProjects();
+      await fetchProjects();
+      alert(editingProject ? 'Project updated successfully!' : 'Project created successfully!');
     } catch (error: any) {
       console.error('Error saving project:', error);
       const errorMessage = error.response?.data?.message 
@@ -186,6 +199,11 @@ export default function Projects() {
     setImageFile(null);
     setImagePreview(null);
     setRemoveImage(false);
+    // Reset file input
+    const imageInput = document.getElementById('image-upload') as HTMLInputElement;
+    if (imageInput) {
+      imageInput.value = '';
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -270,7 +288,7 @@ export default function Projects() {
               <div className="relative h-48 bg-gradient-to-br from-blue-100 to-indigo-100 overflow-hidden">
                 {project.image_url ? (
                   <img
-                    src={project.image_url}
+                    src={`${project.image_url}${project.image_url.includes('?') ? '&' : '?'}t=${Date.now()}`}
                     alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     onError={(e) => {
@@ -460,7 +478,11 @@ export default function Projects() {
                 {(imagePreview || (editingProject?.image_url && !removeImage)) && (
                   <div className="mt-4 relative group">
                     <img
-                      src={imagePreview || editingProject?.image_url || ''}
+                      src={imagePreview 
+                        ? imagePreview 
+                        : editingProject?.image_url 
+                          ? `${editingProject.image_url}${editingProject.image_url.includes('?') ? '&' : '?'}t=${Date.now()}`
+                          : ''}
                       alt={imageFile ? "Preview" : "Current"}
                       className="w-full h-48 object-cover rounded-xl border border-gray-200"
                       onError={(e) => {

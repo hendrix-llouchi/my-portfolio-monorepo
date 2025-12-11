@@ -30,7 +30,11 @@ export default function Experience() {
 
   const fetchExperiences = async () => {
     try {
-      const response = await api.get('/experiences');
+      const response = await api.get(`/experiences?t=${Date.now()}`, {
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       setExperiences(response.data);
     } catch (error) {
       console.error('Error fetching experiences:', error);
@@ -61,10 +65,15 @@ export default function Experience() {
       setShowModal(false);
       setEditingExperience(null);
       resetForm();
-      fetchExperiences();
-    } catch (error) {
+      await fetchExperiences();
+      alert(editingExperience ? 'Experience updated successfully!' : 'Experience added successfully!');
+    } catch (error: any) {
       console.error('Error saving experience:', error);
-      alert('Error saving experience. Please try again.');
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.error 
+        || error.message 
+        || 'Error saving experience. Please try again.';
+      alert(errorMessage);
     }
   };
 
@@ -85,10 +94,15 @@ export default function Experience() {
 
     try {
       await api.delete(`/experiences/${id}`);
-      fetchExperiences();
-    } catch (error) {
+      await fetchExperiences();
+      alert('Experience deleted successfully!');
+    } catch (error: any) {
       console.error('Error deleting experience:', error);
-      alert('Error deleting experience. Please try again.');
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.error 
+        || error.message 
+        || 'Error deleting experience. Please try again.';
+      alert(errorMessage);
     }
   };
 

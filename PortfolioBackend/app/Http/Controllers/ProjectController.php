@@ -292,6 +292,7 @@ class ProjectController extends Controller
 
     /**
      * Delete image file from storage if it's a local file.
+     * Returns path relative to storage/app/public (without 'storage/' prefix).
      *
      * @param string $imageUrl
      * @return void
@@ -308,7 +309,7 @@ class ProjectController extends Controller
         try {
             // Extract the path from the URL
             // URL format: http://127.0.0.1:8000/storage/projects/filename.jpg
-            // We need: projects/filename.jpg
+            // We need: projects/filename.jpg (relative to storage/app/public)
             $path = parse_url($imageUrl, PHP_URL_PATH);
             \Log::info('Parsed URL path', ['url' => $imageUrl, 'parsed_path' => $path]);
             
@@ -316,23 +317,21 @@ class ProjectController extends Controller
                 // Remove leading slash
                 $path = ltrim($path, '/');
                 
-                // Handle different URL formats
-                if (strpos($path, 'storage/') === 0) {
-                    // Format: storage/projects/filename.jpg
-                    $storagePath = str_replace('storage/', '', $path);
-                } elseif (strpos($path, 'projects/') !== false) {
-                    // Format: projects/filename.jpg (direct)
-                    $storagePath = $path;
-                } else {
-                    // Try to extract projects/ part
+                // Remove 'storage/' prefix if present (Laravel Storage expects paths relative to storage/app/public)
+                if (str_starts_with($path, 'storage/')) {
+                    $storagePath = substr($path, 8); // Remove 'storage/' prefix (8 characters)
+                } elseif (str_contains($path, 'projects/')) {
+                    // Extract the part after 'storage/' or just use projects/ part
                     $parts = explode('/', $path);
                     $projectsIndex = array_search('projects', $parts);
                     if ($projectsIndex !== false) {
                         $storagePath = implode('/', array_slice($parts, $projectsIndex));
                     } else {
-                        \Log::warning('Could not extract storage path from URL', ['url' => $imageUrl, 'path' => $path]);
-                        return;
+                        $storagePath = $path;
                     }
+                } else {
+                    \Log::warning('Could not extract storage path from URL', ['url' => $imageUrl, 'path' => $path]);
+                    return;
                 }
                 
                 \Log::info('Extracted storage path', ['storage_path' => $storagePath, 'original_url' => $imageUrl]);

@@ -30,7 +30,11 @@ export default function Messages() {
 
   const fetchMessages = async () => {
     try {
-      const response = await api.get('/messages');
+      const response = await api.get(`/messages?t=${Date.now()}`, {
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       setMessages(response.data);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -49,14 +53,15 @@ export default function Messages() {
 
     try {
       await api.delete(`/messages/${id}`);
-      fetchMessages();
+      await fetchMessages();
+      alert('Message deleted successfully!');
     } catch (error: any) {
-      if (error.response?.status === 404) {
-        alert('Delete endpoint not available. This is a read-only view.');
-      } else {
-        console.error('Error deleting message:', error);
-        alert('Error deleting message. Please try again.');
-      }
+      console.error('Error deleting message:', error);
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.error 
+        || error.message 
+        || 'Error deleting message. Please try again.';
+      alert(errorMessage);
     }
   };
 

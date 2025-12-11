@@ -44,11 +44,12 @@ export default function Dashboard() {
 
   const fetchStats = async () => {
     try {
+      const timestamp = Date.now();
       const [projects, skills, experiences, messages] = await Promise.all([
-        api.get('/projects'),
-        api.get('/skills'),
-        api.get('/experiences'),
-        api.get('/messages'),
+        api.get(`/projects?t=${timestamp}`, { headers: { 'Cache-Control': 'no-cache' } }),
+        api.get(`/skills?t=${timestamp}`, { headers: { 'Cache-Control': 'no-cache' } }),
+        api.get(`/experiences?t=${timestamp}`, { headers: { 'Cache-Control': 'no-cache' } }),
+        api.get(`/messages?t=${timestamp}`, { headers: { 'Cache-Control': 'no-cache' } }),
       ]);
 
       const recentMessages = messages.data.filter((msg: any) => {

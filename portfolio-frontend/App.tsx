@@ -12,10 +12,7 @@ import Footer from './components/Footer';
 function App() {
   return (
     <div className="min-h-screen text-white selection:bg-blue-500/30 selection:text-blue-200">
-      {/* Background with floating bubbles */}
       <Background />
-
-      {/* Content */}
       <div className="relative z-10">
         <Navbar />
         <main>

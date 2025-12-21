@@ -11,25 +11,21 @@ const Background: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Generate 18 floating bubbles with random properties
   const bubbles = Array.from({ length: 18 }, (_, i) => ({
     id: i,
-    size: Math.floor(Math.random() * 12 + 4) * 16, // w-16 to w-64 (64 to 256px)
-    left: Math.random() * 100, // 0-100% horizontal position
-    top: Math.random() * 100, // 0-100% vertical position
-    opacity: Math.random() * 0.2 + 0.1, // 10-30% opacity
-    duration: Math.random() * 10 + 15, // 15-25 seconds for upward drift
-    delay: Math.random() * 5, // 0-5 seconds delay
-    horizontalDuration: Math.random() * 8 + 6, // 6-14 seconds for side-to-side
-    horizontalAmplitude: Math.random() * 40 + 20, // 20-60px side movement
+    size: Math.floor(Math.random() * 12 + 4) * 16,
+    left: Math.random() * 100,
+    top: Math.random() * 100,
+    opacity: Math.random() * 0.2 + 0.1,
+    duration: Math.random() * 10 + 15,
+    delay: Math.random() * 5,
+    horizontalDuration: Math.random() * 8 + 6,
+    horizontalAmplitude: Math.random() * 40 + 20,
   }));
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden">
-      {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#2A2A72] via-[#1e3a8a] to-[#009FFD]" />
-      
-      {/* Floating Bubbles */}
       {bubbles.map((bubble) => (
         <motion.div
           key={bubble.id}

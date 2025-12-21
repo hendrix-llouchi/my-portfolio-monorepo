@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Loader2, Code2 } from 'lucide-react';
 import { Skill } from '../types';
 
-// Icon map for 3D skill icons
 const skillIcons: Record<string, string> = {
   "React": "/icons/react.png",
   "Laravel": "/icons/laravel.png",
@@ -15,25 +14,19 @@ const skillIcons: Record<string, string> = {
   "CSS": "/icons/css.png",
 };
 
-// Helper function to get icon path (case-insensitive with fallback)
 const getSkillIconPath = (skillName: string): string | null => {
-  // Trim and normalize the skill name
   const normalizedName = skillName.trim();
   
-  // Exact match first
   if (skillIcons[normalizedName]) {
     return skillIcons[normalizedName];
   }
   
-  // Case-insensitive match
   const lowerName = normalizedName.toLowerCase();
   for (const [key, value] of Object.entries(skillIcons)) {
     if (key.toLowerCase() === lowerName) {
       return value;
     }
   }
-  
-  // Partial match (e.g., "Laravel" matches "Laravel Framework")
   for (const [key, value] of Object.entries(skillIcons)) {
     if (lowerName.includes(key.toLowerCase()) || key.toLowerCase().includes(lowerName)) {
       return value;

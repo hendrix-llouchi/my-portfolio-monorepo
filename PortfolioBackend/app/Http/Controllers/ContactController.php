@@ -11,20 +11,12 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    /**
-     * Handle the contact form submission.
-     */
     public function submit(ContactFormRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
-        // Save the message to the database
         $message = ContactMessage::create($validated);
-
-        // Broadcast real-time event
         event(new NewContactMessage($message));
-
-        // Send email notification
         Mail::to('henricobb2@gmail.com')->send(new ContactMail($validated));
 
         return response()->json([
@@ -33,9 +25,6 @@ class ContactController extends Controller
         ], 200);
     }
 
-    /**
-     * Get all contact messages (admin only).
-     */
     public function messages(): JsonResponse
     {
         $messages = ContactMessage::latest()->get();
@@ -43,9 +32,6 @@ class ContactController extends Controller
         return response()->json($messages, 200);
     }
 
-    /**
-     * Delete a contact message (admin only).
-     */
     public function destroy(ContactMessage $message): JsonResponse
     {
         $message->delete();

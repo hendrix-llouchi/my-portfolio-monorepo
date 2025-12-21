@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the profile (public endpoint).
-     */
     public function index(): JsonResponse
     {
         $profile = Profile::first();
@@ -23,9 +20,6 @@ class ProfileController extends Controller
         return response()->json($profile);
     }
 
-    /**
-     * Update or create the profile (protected endpoint).
-     */
     public function update(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -50,10 +44,8 @@ class ProfileController extends Controller
             'status_text' => $validated['status_text'] ?? 'System Online',
         ];
 
-        // Get existing profile to check for old files
         $existingProfile = Profile::first();
 
-        // Handle avatar deletion
         if ($request->input('delete_avatar') === 'true' || $request->input('delete_avatar') === true) {
             if ($existingProfile && $existingProfile->avatar_url) {
                 $oldPath = $this->extractPathFromUrl($existingProfile->avatar_url);
@@ -63,9 +55,7 @@ class ProfileController extends Controller
             }
             $profileData['avatar_url'] = null;
         }
-        // Handle avatar upload
         elseif ($request->hasFile('avatar')) {
-            // Delete old avatar if it exists
             if ($existingProfile && $existingProfile->avatar_url) {
                 $oldPath = $this->extractPathFromUrl($existingProfile->avatar_url);
                 if ($oldPath && Storage::disk('public')->exists($oldPath)) {
@@ -73,13 +63,10 @@ class ProfileController extends Controller
                 }
             }
 
-            // Store new avatar - save as actual file
             $path = $request->file('avatar')->store('profile', 'public');
-            // Store just the relative path, not full URL - frontend will construct the URL
             $profileData['avatar_url'] = 'storage/' . $path;
         }
 
-        // Handle resume deletion
         if ($request->input('delete_resume') === 'true' || $request->input('delete_resume') === true) {
             if ($existingProfile && $existingProfile->resume_url) {
                 $oldPath = $this->extractPathFromUrl($existingProfile->resume_url);
@@ -89,9 +76,7 @@ class ProfileController extends Controller
             }
             $profileData['resume_url'] = null;
         }
-        // Handle resume upload
         elseif ($request->hasFile('resume')) {
-            // Delete old resume if it exists
             if ($existingProfile && $existingProfile->resume_url) {
                 $oldPath = $this->extractPathFromUrl($existingProfile->resume_url);
                 if ($oldPath && Storage::disk('public')->exists($oldPath)) {
@@ -99,13 +84,10 @@ class ProfileController extends Controller
                 }
             }
 
-            // Store new resume - save as actual file
             $path = $request->file('resume')->store('profile', 'public');
-            // Store just the relative path, not full URL - frontend will construct the URL
             $profileData['resume_url'] = 'storage/' . $path;
         }
 
-        // Update or create profile (singleton - only one record)
         $profile = Profile::updateOrCreate(
             ['id' => $existingProfile?->id ?? 1],
             $profileData
@@ -114,30 +96,18 @@ class ProfileController extends Controller
         return response()->json($profile);
     }
 
-    /**
-     * Extract the relative path from a URL or path for use with Storage::disk('public').
-     * Returns path relative to storage/app/public (without 'storage/' prefix).
-     *
-     * @param string $url
-     * @return string|null
-     */
     private function extractPathFromUrl(string $url): ?string
     {
-        // If it's already a relative path (starts with 'storage/'), remove the prefix
         if (str_starts_with($url, 'storage/')) {
-            return substr($url, 8); // Remove 'storage/' prefix (8 characters)
+            return substr($url, 8);
         }
         
-        // If it's a full URL, extract the path
         $urlPath = parse_url($url, PHP_URL_PATH);
         if ($urlPath) {
-            // Remove leading slash
             $path = ltrim($urlPath, '/');
-            // Remove 'storage/' prefix if present
             if (str_starts_with($path, 'storage/')) {
-                return substr($path, 8); // Remove 'storage/' prefix
+                return substr($path, 8);
             }
-            // Return the path as is (should be relative to storage/app/public)
             return $path;
         }
         

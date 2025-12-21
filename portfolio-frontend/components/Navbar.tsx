@@ -46,7 +46,6 @@ const Navbar: React.FC = () => {
           HC<span className="text-blue-300">.</span>
         </a>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
@@ -68,7 +67,6 @@ const Navbar: React.FC = () => {
           </a>
         </div>
 
-        {/* Mobile Toggle */}
         <button
           className="md:hidden text-white p-2"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -77,7 +75,6 @@ const Navbar: React.FC = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div

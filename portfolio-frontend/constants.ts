@@ -91,6 +91,6 @@ export const CONTACT_INFO = {
   email: "henricobb2@gmail.com",
   phone: ["0537256750", "0508588389"],
   linkedin: "https://linkedin.com/in/henry-cobbinah",
-  github: "https://github.com/henrycobbinah", // Assumed based on naming convention
+  github: "https://github.com/henrycobbinah",
   location: "Greater Accra Region, Ghana"
 };

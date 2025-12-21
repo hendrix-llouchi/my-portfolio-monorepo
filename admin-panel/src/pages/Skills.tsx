@@ -139,7 +139,6 @@ export default function Skills() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Skills</h1>
@@ -154,7 +153,6 @@ export default function Skills() {
         </button>
       </div>
 
-      {/* Skills by Category */}
       {Object.keys(groupedSkills).length === 0 ? (
         <div className="bg-white rounded-xl p-12 text-center border border-gray-200 shadow-soft">
           <Code className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -224,7 +222,6 @@ export default function Skills() {
         </div>
       )}
 
-      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">

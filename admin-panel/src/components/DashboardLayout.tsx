@@ -11,7 +11,8 @@ import {
   Menu,
   X,
   Bell,
-  Search
+  Search,
+  Users
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -24,7 +25,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Reset scroll position when route changes to prevent header jumping
   useEffect(() => {
     const mainContent = document.querySelector('main');
     if (mainContent) {
@@ -44,11 +44,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { path: '/dashboard/skills', label: 'Skills', icon: Code },
     { path: '/dashboard/experiences', label: 'Experience', icon: Briefcase },
     { path: '/dashboard/messages', label: 'Messages', icon: Mail },
+    { path: '/dashboard/members', label: 'Members', icon: Users },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -57,7 +57,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       )}
 
       <div className="flex">
-        {/* Sidebar */}
         <aside 
           className={`
             fixed lg:static inset-y-0 left-0 z-50
@@ -68,7 +67,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             flex flex-col shadow-2xl
           `}
         >
-          {/* Sidebar Header */}
           <div className="p-6 border-b border-slate-700/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -91,7 +89,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </div>
 
-          {/* Navigation */}
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -120,7 +117,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             })}
           </nav>
 
-          {/* Logout Button */}
           <div className="p-4 border-t border-slate-700/50">
             <button
               onClick={handleLogout}
@@ -132,9 +128,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </aside>
 
-        {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-          {/* Top Header - Fixed position to prevent jumping */}
           <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm h-[72px] flex items-center">
             <div className="w-full px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-full">
@@ -176,7 +170,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </header>
 
-          {/* Page Content - Scrollable area */}
           <main className="flex-1 overflow-y-auto">
             <div className="p-4 sm:p-6 lg:p-8">
               <div className="max-w-7xl mx-auto">

@@ -62,7 +62,6 @@ export default function Profile() {
         if (!previewUrl.startsWith('http')) {
           previewUrl = `http://127.0.0.1:8000/${previewUrl}`;
         }
-        // Add cache-busting parameter
         previewUrl = previewUrl.includes('?') 
           ? `${previewUrl.split('?')[0]}?t=${Date.now()}`
           : `${previewUrl}?t=${Date.now()}`;
@@ -94,18 +93,14 @@ export default function Profile() {
   const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validate file type
       const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
       const validExtensions = ['.pdf', '.doc', '.docx'];
       const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-      
       if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
         alert('Please upload a valid file (PDF, DOC, or DOCX)');
         e.target.value = ''; // Reset input
         return;
       }
-      
-      // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
         alert('File size must be less than 5MB');
         e.target.value = ''; // Reset input
@@ -195,7 +190,6 @@ export default function Profile() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
         <p className="text-gray-600 mt-1">Manage your personal information and portfolio details</p>
@@ -203,7 +197,6 @@ export default function Profile() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Avatar Section */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-soft border border-gray-100 p-6 sticky top-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
@@ -283,9 +276,7 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* Main Form Section */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Basic Information */}
             <div className="bg-white rounded-xl shadow-soft border border-gray-100 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6">Basic Information</h2>
               
@@ -359,7 +350,6 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Social Links */}
             <div className="bg-white rounded-xl shadow-soft border border-gray-100 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <LinkIcon className="w-5 h-5 mr-2 text-blue-600" />
@@ -397,7 +387,6 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Resume Section */}
             <div className="bg-white rounded-xl shadow-soft border border-gray-100 p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <FileText className="w-5 h-5 mr-2 text-blue-600" />
@@ -516,7 +505,6 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Submit Button */}
         <div className="flex justify-end pt-6 border-t border-gray-200">
           <button
             type="submit"

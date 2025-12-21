@@ -8,14 +8,10 @@ use Illuminate\Http\Request;
 
 class ExperienceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): JsonResponse
     {
         try {
             $experiences = Experience::all()->map(function ($experience) {
-                // Ensure technologies is always an array
                 $technologies = $experience->technologies;
                 if (is_string($technologies)) {
                     $decoded = json_decode($technologies, true);
@@ -53,17 +49,6 @@ class ExperienceController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -80,9 +65,6 @@ class ExperienceController extends Controller
         return response()->json($experience, 201);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Experience $experience): JsonResponse
     {
         $validated = $request->validate([
@@ -99,9 +81,6 @@ class ExperienceController extends Controller
         return response()->json($experience);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Experience $experience): JsonResponse
     {
         $experience->delete();

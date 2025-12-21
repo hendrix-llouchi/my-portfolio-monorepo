@@ -7,6 +7,7 @@ import Projects from './pages/Projects';
 import Skills from './pages/Skills';
 import Experience from './pages/Experience';
 import Messages from './pages/Messages';
+import Members from './pages/Members';
 import DashboardLayout from './components/DashboardLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -72,6 +73,16 @@ function App() {
             <ProtectedRoute>
               <DashboardLayout>
                 <Messages />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/members"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <Members />
               </DashboardLayout>
             </ProtectedRoute>
           }

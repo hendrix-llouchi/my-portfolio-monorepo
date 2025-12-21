@@ -89,8 +89,6 @@ const Hero: React.FC = () => {
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative pt-20 pb-10 overflow-hidden">
       <div className="container mx-auto px-6 flex flex-col items-center text-center relative z-10">
-        
-        {/* Profile Image */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -98,10 +96,7 @@ const Hero: React.FC = () => {
           className="relative mb-8"
         >
           <div className="relative w-48 h-48 md:w-64 md:h-64">
-            {/* Outer Glow */}
             <div className="absolute inset-0 rounded-full bg-white/20 blur-xl"></div>
-            
-            {/* Profile Image Container */}
             <div className="relative w-full h-full rounded-full border-4 border-white/30 overflow-hidden shadow-2xl shadow-white/20">
               {avatarUrl ? (
                 <img 
@@ -123,7 +118,6 @@ const Hero: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Text Content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -164,8 +158,6 @@ const Hero: React.FC = () => {
           <p className="text-blue-100/80 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
             {profile?.short_bio || 'Building scalable apps and intelligent solutions.'}
           </p>
-          
-          {/* CTA Button */}
           <motion.a 
             href="#contact" 
             onClick={handleScrollToContact}
@@ -177,7 +169,6 @@ const Hero: React.FC = () => {
             Hire Me
           </motion.a>
 
-          {/* Social Links */}
           <div className="flex items-center justify-center gap-6 mt-10">
             <a 
               href={profile?.linkedin || CONTACT_INFO.linkedin} 
@@ -204,11 +195,8 @@ const Hero: React.FC = () => {
                 className="text-blue-100 hover:text-white transition-colors"
                 title="Download Resume/CV"
                 onClick={(e) => {
-                  // Ensure proper download behavior
                   const url = profile?.resume_url;
                   if (!url) return;
-                  
-                  // Determine if URL is absolute or relative
                   let downloadUrl = url;
                   if (!url.startsWith('http')) {
                     // If relative URL, make it absolute
@@ -218,12 +206,8 @@ const Hero: React.FC = () => {
                       downloadUrl = `${baseUrl}/${url.startsWith('/') ? url.slice(1) : url}`;
                     }
                   }
-                  
-                  // Extract filename from URL
                   const urlParts = downloadUrl.split('/');
                   const filename = urlParts[urlParts.length - 1].split('?')[0] || 'resume.pdf';
-                  
-                  // Force download by creating a temporary link
                   e.preventDefault();
                   const link = document.createElement('a');
                   link.href = downloadUrl;
@@ -241,7 +225,6 @@ const Hero: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Scroll Indicator */}
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 10, 0] }}

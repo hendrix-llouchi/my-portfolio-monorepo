@@ -13,7 +13,6 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
       whileHover={{ y: -5 }}
       className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden hover:shadow-xl hover:border-white/20 transition-all duration-300 flex flex-col"
     >
-      {/* Image Area (Top Half) */}
       <div className="h-48 w-full relative overflow-hidden">
         {project.image_url ? (
           <img 
@@ -21,7 +20,6 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
             alt={project.title}
             className="w-full h-full object-cover"
             onError={(e) => {
-              // If image fails to load, show placeholder
               const target = e.target as HTMLImageElement;
               target.style.display = 'none';
               const placeholder = target.nextElementSibling as HTMLElement;
@@ -40,19 +38,15 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
         </div>
       </div>
 
-      {/* Content Area (Bottom Half) */}
       <div className="p-6 flex flex-col flex-1">
-        {/* Title */}
         <h3 className="text-xl font-bold text-white mb-2 line-clamp-2">
           {project.title}
         </h3>
 
-        {/* Description */}
         <p className="text-blue-100/70 text-sm line-clamp-3 mb-4 leading-relaxed flex-1">
           {project.description}
         </p>
 
-        {/* Tech Stack */}
         {project.tech_stack && project.tech_stack.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
             {(Array.isArray(project.tech_stack) ? project.tech_stack : []).map((tech, idx) => (
@@ -66,7 +60,6 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
           </div>
         )}
 
-        {/* Links Footer */}
         <div className="flex gap-4 pt-4 border-t border-white/10">
           {project.demo_link && (
             <a 
@@ -131,7 +124,6 @@ const Projects: React.FC = () => {
         }
 
         const data = await response.json();
-        // Ensure tech_stack is always an array
         const normalizedData = Array.isArray(data) ? data.map(project => ({
           ...project,
           tech_stack: Array.isArray(project.tech_stack) ? project.tech_stack : []

@@ -12,12 +12,8 @@ const ExperienceCard: React.FC<{ experience: ExperienceType; index: number }> = 
       transition={{ delay: index * 0.1 }}
       className="relative pl-8"
     >
-      {/* Timeline Dot */}
       <div className="absolute left-0 top-6 w-4 h-4 rounded-full bg-purple-400 border-4 border-[#2A2A72] z-10 shadow-lg shadow-purple-400/30" />
-
-      {/* Card */}
       <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 mb-6 hover:border-white/20 transition-colors duration-300">
-        {/* Header: Role and Date */}
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-xl font-bold text-white pr-4">
             {experience.role}
@@ -29,17 +25,14 @@ const ExperienceCard: React.FC<{ experience: ExperienceType; index: number }> = 
           )}
         </div>
 
-        {/* Sub-Header: Company Name */}
         <h4 className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 font-medium mb-3 text-lg">
           {experience.company}
         </h4>
 
-        {/* Body: Description */}
         <p className="text-blue-100/70 mb-4 leading-relaxed">
           {experience.description}
         </p>
 
-        {/* Footer: Technologies */}
         {experience.technologies && experience.technologies.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-4 border-t border-white/10">
             {experience.technologies.map((tech) => (
@@ -125,10 +118,7 @@ const Experience: React.FC = () => {
 
         {!loading && !error && experiences.length > 0 && (
           <div className="max-w-4xl mx-auto relative">
-            {/* Vertical Timeline Line (Full Length) */}
             <div className="absolute left-[7px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-400/30 via-purple-400/20 to-transparent" />
-
-            {/* Experience Cards */}
             <div className="relative">
               {experiences.map((experience, index) => (
                 <ExperienceCard

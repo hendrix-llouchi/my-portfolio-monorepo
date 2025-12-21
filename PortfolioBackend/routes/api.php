@@ -6,6 +6,7 @@ use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SkillController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -49,5 +50,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Profile management (admin only)
     Route::post('/profile', [ProfileController::class, 'update']);
+
+    // User/Member management (admin only)
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{user}', [UserController::class, 'update']);
+    Route::delete('/users/{user}', [UserController::class, 'destroy']);
 });
 

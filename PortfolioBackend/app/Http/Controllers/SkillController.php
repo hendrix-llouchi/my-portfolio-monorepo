@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class SkillController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): JsonResponse
     {
         try {
@@ -29,17 +26,6 @@ class SkillController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -53,9 +39,6 @@ class SkillController extends Controller
         return response()->json($skill, 201);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Skill $skill): JsonResponse
     {
         $validated = $request->validate([
@@ -69,9 +52,6 @@ class SkillController extends Controller
         return response()->json($skill);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Skill $skill): JsonResponse
     {
         $skill->delete();

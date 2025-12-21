@@ -11,9 +11,6 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    /**
-     * Handle a login request.
-     */
     public function login(Request $request): JsonResponse
     {
         $request->validate([
@@ -37,9 +34,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-    /**
-     * Handle a logout request.
-     */
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
@@ -49,9 +43,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-    /**
-     * Handle a forgot password request.
-     */
     public function forgotPassword(Request $request): JsonResponse
     {
         $request->validate([
@@ -61,13 +52,11 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            // Return success even if user doesn't exist (security best practice)
             return response()->json([
                 'message' => 'If that email address exists in our system, we will send a password reset link.',
             ], 200);
         }
 
-        // Generate password reset token using Laravel's Password facade
         $status = Password::sendResetLink(
             $request->only('email')
         );

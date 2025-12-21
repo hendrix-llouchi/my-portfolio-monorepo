@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Send, Loader2 } from 'lucide-react';
 
-// Interfaces
 interface ContactFormState {
   name: string;
   email: string;
@@ -22,7 +21,6 @@ const Contact: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear error message when user starts typing
     if (errorMessage) {
       setErrorMessage(null);
     }
@@ -60,13 +58,10 @@ const Contact: React.FC = () => {
         setIsSuccess(true);
         setFormData({ name: '', email: '', phone: '', message: '' });
         setIsSubmitting(false);
-      
-        // Reset success message after 5 seconds
         setTimeout(() => {
           setIsSuccess(false);
         }, 5000);
       } else {
-        // Handle validation errors (422) or server errors (500)
         const errorMsg = data.message || data.error || 'An error occurred. Please try again.';
         setErrorMessage(errorMsg);
         setIsSubmitting(false);
@@ -92,7 +87,6 @@ const Contact: React.FC = () => {
           </p>
         </div>
 
-        {/* Centered Form Card */}
         <div className="max-w-2xl mx-auto">
           <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -159,21 +153,18 @@ const Contact: React.FC = () => {
                 />
               </div>
 
-              {/* Error Message */}
               {errorMessage && (
                 <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
                   {errorMessage}
                 </div>
               )}
 
-              {/* Success Message */}
               {isSuccess && (
                 <div className="p-4 bg-green-900/20 border border-green-500/30 rounded-lg text-green-400 text-sm">
                   Thank you for your message! We will get back to you soon.
                 </div>
               )}
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}

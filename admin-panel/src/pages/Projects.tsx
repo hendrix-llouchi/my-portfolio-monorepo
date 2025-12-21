@@ -199,7 +199,6 @@ export default function Projects() {
     setImageFile(null);
     setImagePreview(null);
     setRemoveImage(false);
-    // Reset file input
     const imageInput = document.getElementById('image-upload') as HTMLInputElement;
     if (imageInput) {
       imageInput.value = '';
@@ -248,7 +247,6 @@ export default function Projects() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
@@ -263,7 +261,6 @@ export default function Projects() {
         </button>
       </div>
 
-      {/* Projects Grid */}
       {projects.length === 0 ? (
         <div className="bg-white rounded-xl p-12 text-center border border-gray-200 shadow-soft">
           <FolderOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -284,7 +281,6 @@ export default function Projects() {
               key={project.id}
               className="bg-white rounded-xl overflow-hidden shadow-soft hover:shadow-hover transition-all duration-300 border border-gray-100 group"
             >
-              {/* Image */}
               <div className="relative h-48 bg-gradient-to-br from-blue-100 to-indigo-100 overflow-hidden">
                 {project.image_url ? (
                   <img
@@ -319,12 +315,10 @@ export default function Projects() {
                 </div>
               </div>
 
-              {/* Content */}
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{project.title}</h3>
                 <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description}</p>
                 
-                {/* Tech Stack */}
                 {project.tech_stack && project.tech_stack.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4">
                     {Array.isArray(project.tech_stack) ? (
@@ -349,7 +343,6 @@ export default function Projects() {
                   </div>
                 )}
 
-                {/* Links */}
                 <div className="flex gap-3 pt-4 border-t border-gray-100">
                   {project.demo_link && (
                     <a
@@ -380,11 +373,9 @@ export default function Projects() {
         </div>
       )}
 
-      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
               <h3 className="text-2xl font-bold text-gray-900">
                 {editingProject ? 'Edit Project' : 'Add New Project'}
@@ -401,9 +392,7 @@ export default function Projects() {
               </button>
             </div>
 
-            {/* Modal Body */}
             <form onSubmit={handleSubmit} className="p-6 space-y-6" noValidate>
-              {/* Title */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Title <span className="text-red-500">*</span>
@@ -419,7 +408,6 @@ export default function Projects() {
                 />
               </div>
 
-              {/* Description */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Description <span className="text-red-500">*</span>
@@ -435,7 +423,6 @@ export default function Projects() {
                 />
               </div>
 
-              {/* Tech Stack */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Tech Stack (comma separated) <span className="text-red-500">*</span>
@@ -451,7 +438,6 @@ export default function Projects() {
                 />
               </div>
 
-              {/* Image Upload */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Project Image
@@ -515,7 +501,6 @@ export default function Projects() {
                 )}
               </div>
 
-              {/* Demo Link */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Demo Link
@@ -530,7 +515,6 @@ export default function Projects() {
                 />
               </div>
 
-              {/* Repo Link */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Repository Link
@@ -545,7 +529,6 @@ export default function Projects() {
                 />
               </div>
 
-              {/* Modal Footer */}
               <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
                 <button
                   type="button"

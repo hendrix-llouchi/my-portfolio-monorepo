@@ -34,7 +34,6 @@ export default function Dashboard() {
   useEffect(() => {
     fetchStats();
     
-    // Real-time polling: Update stats every 10 seconds
     const interval = setInterval(() => {
       fetchStats();
     }, 10000);
@@ -122,7 +121,6 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
         <div className="flex items-center justify-between">
           <div>
@@ -139,7 +137,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => {
           const Icon = stat.icon;
@@ -171,7 +168,6 @@ export default function Dashboard() {
         })}
       </div>
 
-      {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl p-6 shadow-soft border border-gray-100">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>

@@ -17,7 +17,6 @@ export default function VerifyEmail() {
         return;
       }
 
-      // Check if verification was already done via backend redirect
       const urlParams = new URLSearchParams(window.location.search);
       const verified = urlParams.get('verified');
       const error = urlParams.get('error');
@@ -37,13 +36,11 @@ export default function VerifyEmail() {
         return;
       }
 
-      // If no query params, verify via API
       try {
         const response = await api.get(`/email/verify/${id}/${hash}`);
         setStatus('success');
         setMessage(response.data.message || 'Email verified successfully!');
         
-        // Redirect to login after 3 seconds
         setTimeout(() => {
           navigate('/login');
         }, 3000);
@@ -58,7 +55,6 @@ export default function VerifyEmail() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-y-auto py-8">
-      {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
         <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>

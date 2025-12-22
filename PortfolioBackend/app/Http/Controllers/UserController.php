@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of all users.
-     */
     public function index(): JsonResponse
     {
         try {
@@ -33,9 +30,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Store a newly created user.
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -53,9 +47,6 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
-    /**
-     * Update the specified user.
-     */
     public function update(Request $request, User $user): JsonResponse
     {
         $validated = $request->validate([
@@ -78,9 +69,6 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    /**
-     * Remove the specified user.
-     */
     public function destroy(User $user): JsonResponse
     {
         $user->delete();

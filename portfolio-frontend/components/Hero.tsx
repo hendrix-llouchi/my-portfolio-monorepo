@@ -199,7 +199,6 @@ const Hero: React.FC = () => {
                   if (!url) return;
                   let downloadUrl = url;
                   if (!url.startsWith('http')) {
-                    // If relative URL, make it absolute
                     const apiUrl = import.meta.env.VITE_API_URL;
                     if (apiUrl) {
                       const baseUrl = apiUrl.replace('/api', '');

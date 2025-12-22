@@ -98,12 +98,12 @@ export default function Profile() {
       const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
       if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
         alert('Please upload a valid file (PDF, DOC, or DOCX)');
-        e.target.value = ''; // Reset input
+        e.target.value = '';
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
         alert('File size must be less than 5MB');
-        e.target.value = ''; // Reset input
+        e.target.value = '';
         return;
       }
       

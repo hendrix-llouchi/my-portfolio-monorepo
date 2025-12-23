@@ -11,13 +11,20 @@ class ProfileController extends Controller
 {
     public function index(): JsonResponse
     {
-        $profile = Profile::first();
-        
-        if (!$profile) {
-            return response()->json(['message' => 'Profile not found'], 404);
-        }
+        try {
+            $profile = Profile::first();
+            
+            if (!$profile) {
+                return response()->json(['message' => 'Profile not found'], 404);
+            }
 
-        return response()->json($profile);
+            return response()->json($profile);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to fetch profile',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
     }
 
     public function update(Request $request): JsonResponse

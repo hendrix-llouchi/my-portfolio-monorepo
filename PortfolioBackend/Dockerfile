@@ -52,3 +52,6 @@ RUN echo '<VirtualHost *:80>\n\
 
 # 12. Use Render's dynamic port
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+
+# 13. Run migrations & start Apache
+CMD sh -c "php artisan migrate --force && apache2-foreground"

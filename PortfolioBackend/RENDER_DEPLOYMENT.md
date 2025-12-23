@@ -44,6 +44,8 @@ php artisan key:generate
 ```
 Copy the generated key to Render environment variables as `APP_KEY`.
 
+**Important:** Generate this locally and add it to Render before deployment.
+
 ### 3. Required Environment Variables
 
 Set these in your Render service:
@@ -76,24 +78,42 @@ MAIL_FROM_NAME="Portfolio Backend"
 
 # Queue (if using email)
 QUEUE_CONNECTION=database
+
+# Cache (use file during build, database at runtime)
+CACHE_STORE=database
 ```
+
+**Important:** During build, cache commands may fail if database isn't available. This is normal - caching will happen after migrations in the start command.
 
 ### 4. Build & Start Commands
 
+**If using Docker (Dockerfile):**
+- Build Command: (Leave empty or use `./build.sh` if you want a custom build)
+- Start Command: (Leave empty - Dockerfile CMD handles it)
+
+**If using Native Build (no Docker):**
+
 **Build Command:**
 ```bash
-composer install --no-dev --optimize-autoloader --no-interaction
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 ```
+
+**⚠️ IMPORTANT:** Do NOT run `php artisan config:cache` or other cache commands during build - they require database connection which isn't available yet.
 
 **Start Command:**
 ```bash
-php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
+./start.sh
 ```
 
-**Note:** Render sets the `$PORT` environment variable automatically.
+Or manually:
+```bash
+php artisan optimize:clear && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan serve --host=0.0.0.0 --port=$PORT
+```
+
+**Note:** 
+- Render sets the `$PORT` environment variable automatically.
+- The `start.sh` script handles cache commands gracefully after migrations
+- Cache commands run AFTER migrations when database is available
 
 ### 5. Queue Worker (Optional - for emails)
 
@@ -114,6 +134,22 @@ After deployment, test these endpoints:
 
 ### 7. Common Issues
 
+**Build Error: "Connection refused" or "connection to server at 127.0.0.1 failed":**
+- **Problem:** Cache commands (`config:cache`, `route:cache`, etc.) are trying to connect to database during build
+- **Solution:** Remove ALL cache commands from your Build Command. Only run them in the Start Command AFTER migrations
+- **Correct Build Command:**
+  ```bash
+  composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
+  ```
+- **Correct Start Command:**
+  ```bash
+  ./start.sh
+  ```
+  Or manually:
+  ```bash
+  php artisan optimize:clear && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan serve --host=0.0.0.0 --port=$PORT
+  ```
+
 **500 Errors:**
 - Check Render logs for specific error messages
 - Verify database connection settings
@@ -124,6 +160,7 @@ After deployment, test these endpoints:
 - Verify PostgreSQL database is created and linked
 - Check database credentials match Render's provided values
 - Ensure `DB_CONNECTION=pgsql` is set
+- Verify database is linked to your service in Render dashboard
 
 **CORS Errors:**
 - Update `config/cors.php` to include your frontend domain

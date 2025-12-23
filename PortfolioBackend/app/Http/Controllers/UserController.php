@@ -18,11 +18,6 @@ class UserController extends Controller
 
             return response()->json($users);
         } catch (\Exception $e) {
-            \Log::error('Error fetching users', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
             return response()->json([
                 'message' => 'Failed to fetch users',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'

@@ -37,11 +37,6 @@ class ExperienceController extends Controller
 
             return response()->json($experiences);
         } catch (\Exception $e) {
-            \Log::error('Error fetching experiences', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
             return response()->json([
                 'message' => 'Failed to fetch experiences',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'

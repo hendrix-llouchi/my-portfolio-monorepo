@@ -9,49 +9,38 @@ use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-// Public routes
 Route::get('/profile', [ProfileController::class, 'index']);
 Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/experiences', [ExperienceController::class, 'index']);
 
-// Contact form route with rate limiting
 Route::middleware('throttle:contact')->group(function () {
     Route::post('/contact', [ContactController::class, 'submit']);
 });
 
-// Authentication routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 
-// Protected admin routes
 Route::middleware('auth:sanctum')->group(function () {
-    // Logout
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Projects CRUD (except GET which is public)
     Route::post('/projects', [ProjectController::class, 'store']);
-    Route::delete('/projects/{project}', [ProjectController::class, 'destroy']); // DELETE must come before match route
-    Route::match(['put', 'post'], '/projects/{project}', [ProjectController::class, 'update']); // Support both PUT and POST (for file uploads with _method=PUT)
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
+    Route::match(['put', 'post'], '/projects/{project}', [ProjectController::class, 'update']);
 
-    // Skills CRUD (except GET which is public)
     Route::post('/skills', [SkillController::class, 'store']);
     Route::put('/skills/{skill}', [SkillController::class, 'update']);
     Route::delete('/skills/{skill}', [SkillController::class, 'destroy']);
 
-    // Experiences CRUD (except GET which is public)
     Route::post('/experiences', [ExperienceController::class, 'store']);
     Route::put('/experiences/{experience}', [ExperienceController::class, 'update']);
     Route::delete('/experiences/{experience}', [ExperienceController::class, 'destroy']);
 
-    // Contact messages (admin only)
     Route::get('/messages', [ContactController::class, 'messages']);
     Route::delete('/messages/{message}', [ContactController::class, 'destroy']);
 
-    // Profile management (admin only)
     Route::post('/profile', [ProfileController::class, 'update']);
 
-    // User/Member management (admin only)
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/users', [UserController::class, 'store']);
     Route::put('/users/{user}', [UserController::class, 'update']);

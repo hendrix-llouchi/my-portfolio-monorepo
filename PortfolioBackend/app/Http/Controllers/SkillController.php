@@ -14,11 +14,6 @@ class SkillController extends Controller
             $skills = Skill::all();
             return response()->json($skills);
         } catch (\Exception $e) {
-            \Log::error('Error fetching skills', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
             return response()->json([
                 'message' => 'Failed to fetch skills',
                 'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'

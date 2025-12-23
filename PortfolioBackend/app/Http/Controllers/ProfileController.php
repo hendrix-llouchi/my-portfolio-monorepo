@@ -28,7 +28,7 @@ class ProfileController extends Controller
             'sub_headline' => 'nullable|string|max:255',
             'short_bio' => 'nullable|string',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // 5MB max for resume
+            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
             'linkedin' => 'nullable|string|max:255',
             'github' => 'nullable|string|max:255',
             'status_text' => 'nullable|string|max:255',

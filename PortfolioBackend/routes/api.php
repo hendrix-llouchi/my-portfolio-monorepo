@@ -9,9 +9,31 @@ use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/profile', [ProfileController::class, 'index']);
+Route::get('/profile', function () {
+    return response()->json([
+        'id' => 1,
+        'name' => 'Henry Cobbinah',
+        'headline' => 'Software Engineer | Full-Stack & Mobile Dev',
+        'sub_headline' => 'Machine Learning • Data Science • AI',
+        'short_bio' => 'Building scalable apps and intelligent solutions.',
+        'status_text' => 'System Online',
+        'avatar_url' => null,
+        'resume_url' => null,
+        'linkedin' => null,
+        'github' => null,
+    ]);
+});
+
+Route::get('/skills', function () {
+    return response()->json([
+        ['id' => 1, 'name' => 'Vue.js', 'category' => 'Frontend', 'proficiency' => 90],
+        ['id' => 2, 'name' => 'React', 'category' => 'Frontend', 'proficiency' => 85],
+        ['id' => 3, 'name' => 'Laravel', 'category' => 'Backend', 'proficiency' => 88],
+        ['id' => 4, 'name' => 'Python', 'category' => 'Backend', 'proficiency' => 92],
+    ]);
+});
+
 Route::get('/projects', [ProjectController::class, 'index']);
-Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/experiences', [ExperienceController::class, 'index']);
 
 Route::middleware('throttle:contact')->group(function () {

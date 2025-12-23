@@ -35,5 +35,8 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 
-# 10. Use Render's dynamic port
+# ⚠️ NEW LINE HERE: Enable Apache mod_rewrite for Laravel routes
+RUN a2enmod rewrite
+
+# 9. Use Render's dynamic port
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/ports.conf /etc/apache2/sites-available/*.conf

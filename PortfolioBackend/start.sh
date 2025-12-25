@@ -2,8 +2,14 @@
 set -e
 
 echo "Clearing old cache..."
-php artisan optimize:clear || true
+# Clear cache that doesn't require database connection
 php artisan config:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
+php artisan event:clear || true
+
+# Only clear database cache if database is available
+php artisan cache:clear || echo "Cache clear skipped (database may not be available yet)"
 
 echo "Running migrations..."
 php artisan migrate --force

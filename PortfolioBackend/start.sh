@@ -3,6 +3,7 @@ set -e
 
 echo "Clearing old cache..."
 php artisan optimize:clear || true
+php artisan config:clear || true
 
 echo "Running migrations..."
 php artisan migrate --force

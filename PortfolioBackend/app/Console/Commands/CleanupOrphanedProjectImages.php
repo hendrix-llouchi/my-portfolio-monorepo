@@ -8,28 +8,14 @@ use Illuminate\Support\Facades\Storage;
 
 class CleanupOrphanedProjectImages extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'projects:cleanup-images';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Remove image files that are not associated with any project';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $this->info('Starting cleanup of orphaned project images...');
 
-        // Get all project image URLs from database
         $projects = Project::whereNotNull('image_url')->get();
         $usedImages = [];
 
@@ -44,12 +30,10 @@ class CleanupOrphanedProjectImages extends Command
 
         $this->info('Found ' . count($usedImages) . ' images in use by projects.');
 
-        // Get all image files in storage
         $allImages = Storage::disk('public')->files('projects');
         $orphanedImages = [];
 
         foreach ($allImages as $imagePath) {
-            // Extract just the filename part for comparison
             $filename = basename($imagePath);
             $isUsed = false;
 
@@ -93,12 +77,6 @@ class CleanupOrphanedProjectImages extends Command
         return 0;
     }
 
-    /**
-     * Extract storage path from image URL.
-     *
-     * @param string $imageUrl
-     * @return string|null
-     */
     private function extractStoragePath(string $imageUrl): ?string
     {
         $path = parse_url($imageUrl, PHP_URL_PATH);

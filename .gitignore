@@ -2,10 +2,13 @@
 node_modules/
 vendor/
 
-# Environment Variables (Keep these secret!)
+# Environment Variables
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+*.env
 
 # System/Build Files
 .DS_Store
@@ -13,3 +16,26 @@ dist/
 build/
 public/build/
 storage/*.key
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+storage/logs/*.log
+
+# Database
+*.sqlite
+*.sqlite-journal
+database/*.sqlite
+
+# Cache
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*

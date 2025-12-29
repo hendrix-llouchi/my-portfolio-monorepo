@@ -17,19 +17,11 @@ class NewContactMessage implements ShouldBroadcast
 
     public $message;
 
-    /**
-     * Create a new event instance.
-     */
     public function __construct(ContactMessage $message)
     {
         $this->message = $message;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn(): array
     {
         return [
@@ -37,9 +29,6 @@ class NewContactMessage implements ShouldBroadcast
         ];
     }
 
-    /**
-     * The event's broadcast name.
-     */
     public function broadcastAs(): string
     {
         return 'new.message';

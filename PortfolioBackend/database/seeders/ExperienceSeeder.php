@@ -14,6 +14,14 @@ class ExperienceSeeder extends Seeder
     public function run(): void
     {
         Experience::create([
+            'company' => 'Google',
+            'role' => 'Full Stack Developer',
+            'period' => '2019 - 2024',
+            'description' => 'Led development of scalable web applications serving millions of users. Architected and implemented full-stack solutions using modern technologies. Collaborated with cross-functional teams to deliver high-quality products. Mentored junior developers and contributed to technical decision-making.',
+            'technologies' => ['React', 'TypeScript', 'Node.js', 'Python', 'Go', 'Kubernetes', 'Docker', 'PostgreSQL', 'MongoDB', 'GraphQL', 'REST APIs', 'Microservices', 'AWS', 'GCP'],
+        ]);
+
+        Experience::create([
             'company' => 'Npontu Technologies Limited',
             'role' => 'Full-Stack Developer Intern',
             'period' => 'Nov 2025 - Present',

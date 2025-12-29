@@ -15,12 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Seed admin user first
+        $this->call(AdminSeeder::class);
+
         // User::factory(10)->create();
 
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Seed profile
+        $this->call(ProfileSeeder::class);
 
         // Seed projects
         $this->call(ProjectSeeder::class);

@@ -19,12 +19,39 @@ export default function Login() {
 
     try {
       const response = await api.post('/login', { email, password });
-      const { token } = response.data;
+      
+      // Handle response structure
+      const token = response.data?.token || response.data?.data?.token;
+      
+      if (!token) {
+        throw new Error('No token received from server. Please check your backend configuration.');
+      }
       
       localStorage.setItem('admin_token', token);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      console.error('Login error:', err);
+      
+      let errorMessage = 'Login failed. Please check your credentials.';
+      
+      if (err.response) {
+        // Server responded with error
+        const errorData = err.response.data;
+        if (errorData?.message) {
+          errorMessage = errorData.message;
+        } else if (errorData?.errors?.email) {
+          errorMessage = Array.isArray(errorData.errors.email) 
+            ? errorData.errors.email[0] 
+            : errorData.errors.email;
+        }
+      } else if (err.request) {
+        // Request was made but no response received
+        errorMessage = 'Unable to connect to the server. Please ensure the backend is running and check your API URL configuration.';
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

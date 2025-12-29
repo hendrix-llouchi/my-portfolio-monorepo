@@ -63,9 +63,11 @@ const Experience: React.FC = () => {
 
         const apiUrl = import.meta.env.VITE_API_URL;
         if (!apiUrl) {
-          throw new Error('API URL is not configured. Please set VITE_API_URL in your .env file.');
+          console.error('VITE_API_URL is not set. Current env:', import.meta.env);
+          throw new Error('API URL is not configured. Please set VITE_API_URL in your .env file or Vercel environment variables.');
         }
 
+        console.log('Fetching experiences from:', `${apiUrl}/experiences`);
         const response = await fetch(`${apiUrl}/experiences`, {
           method: 'GET',
           headers: {
@@ -80,10 +82,14 @@ const Experience: React.FC = () => {
         }
 
         const data = await response.json();
+        console.log('Experiences received:', data);
         setExperiences(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Error fetching experiences:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load experiences. Please try again later.');
+        const errorMessage = err instanceof Error 
+          ? `${err.message} (API: ${import.meta.env.VITE_API_URL || 'not configured'})`
+          : 'Failed to load experiences. Please try again later.';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

@@ -107,9 +107,11 @@ const Projects: React.FC = () => {
 
         const apiUrl = import.meta.env.VITE_API_URL;
         if (!apiUrl) {
-          throw new Error('API URL is not configured. Please set VITE_API_URL in your .env file.');
+          console.error('VITE_API_URL is not set. Current env:', import.meta.env);
+          throw new Error('API URL is not configured. Please set VITE_API_URL in your .env file or Vercel environment variables.');
         }
 
+        console.log('Fetching projects from:', `${apiUrl}/projects`);
         const response = await fetch(`${apiUrl}/projects`, {
           method: 'GET',
           headers: {
@@ -128,10 +130,14 @@ const Projects: React.FC = () => {
           ...project,
           tech_stack: Array.isArray(project.tech_stack) ? project.tech_stack : []
         })) : [];
+        console.log('Projects received:', normalizedData);
         setProjects(normalizedData);
       } catch (err) {
         console.error('Error fetching projects:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load projects. Please try again later.');
+        const errorMessage = err instanceof Error 
+          ? `${err.message} (API: ${import.meta.env.VITE_API_URL || 'not configured'})`
+          : 'Failed to load projects. Please try again later.';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

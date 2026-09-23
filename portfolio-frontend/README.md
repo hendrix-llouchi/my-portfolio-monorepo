@@ -1,20 +1,21 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Portfolio Frontend
 
-# Run and deploy your AI Studio app
+The public-facing portfolio website built with React 19, TypeScript, Three.js, Framer Motion, and Tailwind CSS.
 
-This contains everything you need to run your app locally.
+## Features
+- **Dynamic Showcase**: Displays projects, skills, career experience, and contact forms connected to the Laravel API.
+- **Modern Animations**: Powered by Framer Motion and Three.js for interactive 3D elements and fluid transitions.
+- **Responsive & Accessible**: Optimized for all device viewports with smooth mobile touch navigation.
 
-View your app in AI Studio: https://ai.studio/apps/temp/1
+## Development
 
-## Run Locally
+```bash
+# Install dependencies
+npm install
 
-**Prerequisites:**  Node.js
+# Run development server
+npm run dev
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+# Build for production
+npm run build
+```

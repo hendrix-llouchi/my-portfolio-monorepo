@@ -1,5 +1,23 @@
-# Vue 3 + TypeScript + Vite
+# Portfolio Admin Panel
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+The content management dashboard (CMS) for the portfolio, built with React 18, TypeScript, Tailwind CSS, Vite, and React Router v7.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Features
+- **Authentication**: Secure token-based authentication via Laravel Sanctum.
+- **Projects Management**: Add, update, and remove portfolio projects, images, and live links.
+- **Skills & Experience**: Manage technical capabilities and employment history timeline.
+- **Messages Inbox**: Review and manage messages sent through the public contact form.
+- **User Management**: Manage administrative users and roles.
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```

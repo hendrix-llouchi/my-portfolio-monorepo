@@ -1,109 +1,105 @@
-# Hendrix's Portfolio
+# Henry Cobbinah - Portfolio
 
-A modern, high-performance portfolio website built with React 19, TypeScript, Vite, Tailwind CSS, Three.js, and Framer Motion.
+A modern, high-performance developer portfolio built with React 19, TypeScript, Vite, Tailwind CSS, Three.js, and Framer Motion. 
 
-> **📢 Architecture Notice: Transitioning to Frontend-Only (Static / Jamstack)**  
-> This project is shifting from a multi-service fullstack monorepo to a **100% standalone, frontend-only architecture**.  
-> **Why?**
-> * **$0 Hosting Costs Forever**: Effortless deployment to Vercel, Netlify, or GitHub Pages.
-> * **Zero Cold Starts**: No waiting 30–60 seconds for free-tier backend containers (e.g., Render/Railway) to spin up.
-> * **Zero Maintenance**: Eliminates PHP/Composer version lock-in, database migrations, CORS issues, and queue worker processes.
-> * **Instant Performance**: Static data served instantly over global edge CDNs.
+This repository is a **100% standalone, frontend-only static web application**. It requires no backend server, no database, and can be hosted completely free on Vercel, Netlify, or GitHub Pages.
 
 ---
 
-## 🏗️ Repository Structure
+## ⚡ Tech Stack & Features
+
+* **Framework**: React 19 + TypeScript + Vite
+* **3D Visuals**: Three.js (`three` + `@types/three`)
+* **Animations**: Framer Motion
+* **Styling**: Tailwind CSS
+* **Icons**: Lucide React
+* **Contact Form**: Web3Forms (serverless email delivery to `henricobb2@gmail.com`) with automatic `mailto:` fallback
+* **Design Standards**: `taste-skill` suite for anti-slop typography, responsive layouts, and fluid motion
+
+---
+
+## 📁 Project Structure
 
 ```
-my-portfolio-monorepo/
-├── portfolio-frontend/       # 🌟 [PRIMARY] Standalone React 19 Showcase Portfolio
-│   ├── React 19, TypeScript, Vite
-│   ├── Three.js 3D graphics & animations
-│   ├── Framer Motion & Tailwind CSS
-│   └── Static type-safe data (constants.ts)
-│
-├── admin-panel/              # 📦 [OPTIONAL / LEGACY] Admin CMS Dashboard
-│   ├── React 18, React Router v7, Axios
-│   └── (Used only with the fullstack Laravel backend)
-│
-└── PortfolioBackend/         # 📦 [OPTIONAL / LEGACY] Laravel 12 REST API
-    ├── PHP 8.2+, Laravel Sanctum, SQLite / MySQL
-    └── (Archived for fullstack reference or future API needs)
+portfolio/
+├── components/          # Reusable UI sections & cards
+│   ├── Navbar.tsx       # Navigation header
+│   ├── Hero.tsx         # Hero section with portrait & social links
+│   ├── About.tsx        # Bio & core pillars
+│   ├── Experience.tsx   # Industry internships & career timeline
+│   ├── Skills.tsx       # Tech proficiencies with icon badges
+│   ├── Projects.tsx     # Project showcase with GitHub/Demo links
+│   ├── Contact.tsx      # Serverless contact form
+│   ├── Footer.tsx       # Footer links & copyright
+│   └── Background.tsx   # Ambient animated visual background
+├── public/              # Static assets (technology icons)
+├── constants.ts         # Centralized type-safe portfolio data
+├── types.ts             # TypeScript interface definitions
+├── henry.jpg            # Profile portrait image
+├── App.tsx              # Root application layout
+├── index.html           # HTML entrypoint
+└── package.json         # Dependencies & scripts
 ```
 
 ---
 
-## ⚡ Tech Stack
+## 🚀 Getting Started Locally
 
-| Layer | Technologies | Role |
-| :--- | :--- | :--- |
-| **Core Framework** | React 19, TypeScript, Vite | Fast, modern client runtime with strict typing. |
-| **3D & Visuals** | Three.js (`three`), WebGL | 3D interactive canvas and background animations. |
-| **Animation** | Framer Motion / Motion | Fluid physics-based transitions, hover cards, and scroll reveals. |
-| **Styling & Icons** | Tailwind CSS, Lucide React | Utility-first styling with responsive design tokens. |
-| **Design Standards**| `taste-skill` suite | Anti-slop engineering, typography discipline, and asymmetric layouts. |
-| **Form Handling** | Serverless (Web3Forms / EmailJS) | Direct email delivery without requiring a dedicated backend server. |
+### Prerequisites
+* **Node.js** (v18+)
+* **NPM**
 
----
-
-## 🚀 Frontend-Only Migration Roadmap
-
-We are actively rolling out the following enhancements:
-
-### 1. 🔄 Standalone Data & Contact Form Decoupling
-- [ ] **Static Data Integration**: Power [`Projects.tsx`](portfolio-frontend/components/Projects.tsx), [`Experience.tsx`](portfolio-frontend/components/Experience.tsx), and [`Skills.tsx`](portfolio-frontend/components/Skills.tsx) directly from type-safe [`constants.ts`](portfolio-frontend/constants.ts) without relying on backend API calls.
-- [ ] **Serverless Contact Form**: Replace the Laravel `/api/contact` endpoint with **Web3Forms** or **EmailJS** to send messages directly to inbox with zero server dependencies.
-
-### 2. 🌌 Three.js Interactive 3D Visuals
-- [ ] **3D Interactive Canvas**: Integrate interactive Three.js 3D particle fields or floating geometric wireframes responsive to mouse movement and scroll.
-- [ ] **Performance Polish**: Ensure hardware-accelerated 60fps rendering with smooth fallback on low-power and mobile devices.
-
-### 3. 🎨 Taste-Skill UI/UX Elevation
-- [ ] **Bento Grid Showcase**: Modernize the projects layout into an asymmetric bento grid.
-- [ ] **Display Typography**: Implement curated sans-serif pairings (Geist / Satoshi) with fluid responsive scaling.
-- [ ] **Micro-Interactions**: Add magnetic hover effects, glassmorphic accents, and animated state transitions.
-
-### 4. 📱 Mobile & Accessibility (a11y)
-- [ ] **Mobile Stability**: Adopt `min-h-[100dvh]` to eliminate mobile address-bar resize jumps.
-- [ ] **Accessibility Compliance**: Support `prefers-reduced-motion` and strict color contrast guidelines.
-
----
-
-## 💻 Quickstart (Frontend-Only)
-
-To run the portfolio locally:
+### Installation
 
 ```bash
-# Navigate to the frontend directory
-cd portfolio-frontend
+# Clone the repository
+git clone https://github.com/hendrix-llouchi/my-portfolio-monorepo.git
 
-# Install dependencies (includes Three.js and Framer Motion)
+# Enter the project directory
+cd my-portfolio-monorepo
+
+# Install dependencies
 npm install
 
-# Start Vite development server
+# Start Vite local development server
 npm run dev
 ```
 
-Open `http://localhost:5173` in your browser.
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## 🚢 Production Deployment
+## 🛠️ Build for Production
 
-Because the project is standalone frontend, you can deploy in one command or connect directly to **Vercel** or **Netlify**:
+```bash
+npm run build
+```
 
-* **Root Directory**: `portfolio-frontend`
+The optimized, production-ready static assets will be compiled into the `dist/` directory.
+
+---
+
+## 📬 Contact Form Configuration (Optional)
+
+The contact form is configured to work out-of-the-box using direct email fallback. 
+
+To enable silent, seamless in-page submissions without opening a mail client:
+1. Get a free access key at [https://web3forms.com](https://web3forms.com) (enter `henricobb2@gmail.com`).
+2. Create a `.env` file in the root directory:
+   ```env
+   VITE_WEB3FORMS_ACCESS_KEY=your_access_key_here
+   ```
+
+---
+
+## 🚢 Deployment
+
+Deploy in one click to any modern static host:
+
+### Vercel / Netlify
 * **Build Command**: `npm run build`
 * **Output Directory**: `dist`
-
----
-
-## 📦 Legacy Fullstack Modules (Optional)
-
-If you wish to experiment with or run the original Laravel API and Admin CMS panel:
-
-* **Backend**: See [PortfolioBackend/README.md](PortfolioBackend/README.md) (`php artisan serve`)
-* **Admin Panel**: See [admin-panel/README.md](admin-panel/README.md) (`npm run dev`)
+* **Install Command**: `npm install`
 
 ---
 

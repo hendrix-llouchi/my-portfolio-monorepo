@@ -4,6 +4,7 @@ export interface Experience {
   role: string;
   period?: string;
   type?: string;
+  location?: string;
   description: string;
   technologies?: string[] | null;
   created_at?: string;
@@ -14,6 +15,7 @@ export interface Project {
   id?: number;
   title: string;
   description: string;
+  year?: string;
   tech_stack?: string[];
   techStack?: string[];
   image_url?: string | null;

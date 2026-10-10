@@ -36,7 +36,7 @@ function Badge() {
           <path id="badge-circle" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
         </defs>
         <text style={{ fontSize: '10px', letterSpacing: '2.4px', fontWeight: 600, fontFamily: 'Inter, sans-serif', fill: '#161513' }}>
-          <textPath href="#badge-circle">AVAILABLE FOR PROJECTS · AVAILABLE FOR PROJECTS ·</textPath>
+          <textPath href="#badge-circle" textLength="276" lengthAdjust="spacingAndGlyphs">AVAILABLE FOR PROJECTS ·</textPath>
         </text>
       </svg>
       <svg className="core-mark" viewBox="0 0 24 24" width="26" height="26" aria-hidden>

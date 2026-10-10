@@ -28,16 +28,43 @@ function Nav() {
   );
 }
 
+const BADGE_GLYPHS = [...'AVAILABLE FOR PROJECTS · '];
+const BADGE_ADV = [6.76, 6.76, 6.76, 2.64, 5.62, 6.76, 6.51, 5.62, 5.98, 2.81, 5.87, 7.61, 6.39, 2.81, 6.35, 6.39, 7.61, 5.43, 5.98, 7.27, 6.42, 6.38, 2.81, 2.76, 2.81];
+const BADGE_R = 44, BADGE_C = 60, BADGE_SPAN = 320, BADGE_SAFETY = 1.15, BADGE_LS = 3.8;
+
+function badgeLayout() {
+  const slots = BADGE_ADV.map((a) => a + BADGE_LS);
+  const layoutTotal = slots.reduce((s, w) => s + w, 0) * BADGE_SAFETY;
+  const start = -90 - BADGE_SPAN / 2;
+  let acc = 0;
+  return BADGE_GLYPHS.map((ch, i) => {
+    const mid = acc + slots[i] / 2;
+    acc += slots[i];
+    const ang = start + (mid / layoutTotal) * BADGE_SPAN;
+    const rad = (ang * Math.PI) / 180;
+    const x = BADGE_C + BADGE_R * Math.cos(rad);
+    const y = BADGE_C + BADGE_R * Math.sin(rad);
+    return { ch, x: +x.toFixed(2), y: +y.toFixed(2), rot: +(ang + 90).toFixed(2) };
+  });
+}
+const BADGE_LAYOUT = badgeLayout();
+
 function Badge() {
   return (
     <div className="badge" aria-hidden>
       <svg className="ring" viewBox="0 0 120 120">
-        <defs>
-          <path id="badge-circle" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
-        </defs>
-        <text style={{ fontSize: '10px', letterSpacing: '4.6px', fontWeight: 600, fontFamily: 'Inter, sans-serif', fill: '#161513' }}>
-          <textPath href="#badge-circle">AVAILABLE FOR PROJECTS · </textPath>
-        </text>
+        {BADGE_LAYOUT.map((g, i) => (
+          <text
+            key={i}
+            x={g.x}
+            y={g.y}
+            textAnchor="middle"
+            transform={`rotate(${g.rot} ${g.x} ${g.y})`}
+            style={{ fontSize: '10px', fontWeight: 600, fontFamily: 'Inter, sans-serif', fill: '#161513' }}
+          >
+            {g.ch}
+          </text>
+        ))}
       </svg>
       <svg className="core-mark" viewBox="0 0 24 24" width="26" height="26" aria-hidden>
         <g stroke="#161513" strokeWidth="2.2" strokeLinecap="round">

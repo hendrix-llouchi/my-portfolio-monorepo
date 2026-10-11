@@ -1,107 +1,88 @@
-# Henry Cobbinah - Portfolio
+# Henry Cobbinah — Portfolio
 
-A modern, high-performance developer portfolio built with React 19, TypeScript, Vite, Tailwind CSS, Three.js, and Framer Motion. 
+A light, editorial developer portfolio. Cream canvas, oversized Bodoni Moda serif type, thin rules, generous whitespace — built as a 100% standalone frontend with no backend, no database, and no build-time image pipeline.
 
-This repository is a **100% standalone, frontend-only static web application**. It requires no backend server, no database, and can be hosted completely free on Vercel, Netlify, or GitHub Pages.
-
----
-
-## ⚡ Tech Stack & Features
-
-* **Framework**: React 19 + TypeScript + Vite
-* **3D Visuals**: Three.js (`three` + `@types/three`)
-* **Animations**: Framer Motion
-* **Styling**: Tailwind CSS
-* **Icons**: Lucide React
-* **Contact Form**: Web3Forms (serverless email delivery to `henricobb2@gmail.com`) with automatic `mailto:` fallback
-* **Design Standards**: `taste-skill` suite for anti-slop typography, responsive layouts, and fluid motion
+**Live:** https://henry-cobbinah.vercel.app
 
 ---
 
-## 📁 Project Structure
+## Design
+
+- **Canvas:** warm cream (`#f4efe4`), ink text (`#161513`)
+- **Type:** Bodoni Moda (display serif) + Inter (body/labels)
+- **Sections:** Hero → About → Experience → Selected Work → Contact
+- **Details:** rotating "AVAILABLE FOR PROJECTS" badge (letters individually positioned around the ring for consistent rendering across browsers), black-and-white portrait, Framer Motion scroll reveals, thin divider rules
+- **No Tailwind CDN, no Three.js** — hand-written CSS in `index.css`
+
+## Tech stack
+
+- React 19 + TypeScript + Vite
+- Framer Motion (reveals), Lucide React (icons)
+- Contact form: Web3Forms when a `VITE_WEB3FORMS_ACCESS_KEY` is set, otherwise `mailto:` fallback to `henricobb2@gmail.com`
+
+## Project structure
 
 ```
-portfolio/
-├── components/          # Reusable UI sections & cards
-│   ├── Navbar.tsx       # Navigation header
-│   ├── Hero.tsx         # Hero section with portrait & social links
-│   ├── About.tsx        # Bio & core pillars
-│   ├── Experience.tsx   # Industry internships & career timeline
-│   ├── Skills.tsx       # Tech proficiencies with icon badges
-│   ├── Projects.tsx     # Project showcase with GitHub/Demo links
-│   ├── Contact.tsx      # Serverless contact form
-│   ├── Footer.tsx       # Footer links & copyright
-│   └── Background.tsx   # Ambient animated visual background
-├── public/              # Static assets (technology icons)
-├── constants.ts         # Centralized type-safe portfolio data
-├── types.ts             # TypeScript interface definitions
-├── henry.jpg            # Profile portrait image
-├── App.tsx              # Root application layout
-├── index.html           # HTML entrypoint
-└── package.json         # Dependencies & scripts
+├── App.tsx          # All five sections + badge, nav, footer
+├── index.css        # Editorial design system (no framework)
+├── index.html       # Entry — Google Fonts (Bodoni Moda + Inter)
+├── constants.ts     # Portfolio data: experience, projects, socials
+├── types.ts         # TypeScript interfaces
+├── photo.ts         # Hero portrait (B&W, embedded as base64)
+├── index.tsx        # React root
+└── vite.config.ts   # Vite config
 ```
+
+## Selected work
+
+1. **FarmLink** — https://github.com/hendrix-llouchi/FarmLink
+2. **Valkyrie** — https://github.com/hendrix-llouchi/Valkyire
+3. **VisionLM** — https://github.com/hendrix-llouchi/Vision-LM
+4. **voltsnbits** — https://github.com/hendrix-llouchi/voltsnbits
+
+## Experience
+
+Roles-only ledger (latest first): Npontu Technologies Limited (Full Stack Developer), AngloGold Ashanti Iduapriem Mine (Backend Developer), Excelerate (AI Forensic Advisory), Go2Cod (Data Science), ERA AXIS (LinkedIn Optimization & Research Intern).
 
 ---
 
-## 🚀 Getting Started Locally
+## Getting started locally
 
-### Prerequisites
-* **Node.js** (v18+)
-* **NPM**
-
-### Installation
+Prerequisites: Node.js v18+, npm.
 
 ```bash
-# Clone the repository
 git clone https://github.com/hendrix-llouchi/my-portfolio-monorepo.git
-
-# Enter the project directory
 cd my-portfolio-monorepo
-
-# Install dependencies
 npm install
-
-# Start Vite local development server
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open http://localhost:5173.
 
----
-
-## 🛠️ Build for Production
+## Build for production
 
 ```bash
 npm run build
 ```
 
-The optimized, production-ready static assets will be compiled into the `dist/` directory.
+Output goes to `dist/`.
 
----
+## Contact form (optional)
 
-## 📬 Contact Form Configuration (Optional)
+Out of the box the form falls back to opening the visitor's mail client. For silent in-page submissions, get a free key at https://web3forms.com and set it as a Vercel environment variable (or local `.env`):
 
-The contact form is configured to work out-of-the-box using direct email fallback. 
+```env
+VITE_WEB3FORMS_ACCESS_KEY=your_access_key_here
+```
 
-To enable silent, seamless in-page submissions without opening a mail client:
-1. Get a free access key at [https://web3forms.com](https://web3forms.com) (enter `henricobb2@gmail.com`).
-2. Create a `.env` file in the root directory:
-   ```env
-   VITE_WEB3FORMS_ACCESS_KEY=your_access_key_here
-   ```
+## Deployment
 
----
+Hosted on Vercel (auto-deploys from `main`):
 
-## 🚢 Deployment
+- **Build command:** `npm run build`
+- **Output directory:** `dist`
+- **Install command:** `npm install`
 
-Deploy in one click to any modern static host:
+## License
 
-### Vercel / Netlify
-* **Build Command**: `npm run build`
-* **Output Directory**: `dist`
-* **Install Command**: `npm install`
-
----
-
-## 📄 License
-This project is open-source and available under the [MIT License](LICENSE).
+MIT.
